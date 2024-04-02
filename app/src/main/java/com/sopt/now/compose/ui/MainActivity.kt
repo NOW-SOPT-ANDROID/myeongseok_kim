@@ -55,9 +55,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    when {
-                        mainViewModel.screenNumber.value == 0 -> SignUp(mainViewModel)
-                        mainViewModel.screenNumber.value == 1 -> Login(mainViewModel)
+                    when (mainViewModel.screenNumber.value) {
+                        0 -> SignUp(mainViewModel)
+                        1 -> Login(mainViewModel)
                         else -> Main(mainViewModel)
                     }
                 }
@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Login(viewModel: MainViewModel) {
-    var id by remember { mutableStateOf("1") }
+    var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     Column(
         modifier = Modifier
@@ -275,7 +275,7 @@ fun Main(viewModel: MainViewModel) {
             fontSize = 15.sp,
         )
         Text(
-            text = "${viewModel.id.value}",
+            text = viewModel.id.value,
             textAlign = TextAlign.Start,
             modifier = Modifier.fillMaxWidth(),
             fontSize = 15.sp,
@@ -289,7 +289,7 @@ fun Main(viewModel: MainViewModel) {
             fontSize = 15.sp,
         )
         Text(
-            text = "${viewModel.password.value}",
+            text = viewModel.password.value,
             textAlign = TextAlign.Start,
             modifier = Modifier.fillMaxWidth(),
             fontSize = 15.sp,
@@ -304,7 +304,7 @@ fun Main(viewModel: MainViewModel) {
             fontSize = 15.sp,
             )
         Text(
-            text = "${viewModel.mbti.value}",
+            text = viewModel.mbti.value,
             textAlign = TextAlign.Start,
             modifier = Modifier.fillMaxWidth(),
             fontSize = 15.sp,

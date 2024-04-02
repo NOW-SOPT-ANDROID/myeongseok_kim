@@ -9,11 +9,11 @@ class MainViewModel() : ViewModel() {
     private val _id = mutableStateOf("")
     val id: State<String> = _id
     private val _password = mutableStateOf("")
-    val password: State<String> = _id
+    val password: State<String> = _password
     private val _nickname = mutableStateOf("")
-    val nickname: State<String> = _id
+    val nickname: State<String> = _nickname
     private val _mbti = mutableStateOf("")
-    val mbti: State<String> = _id
+    val mbti: State<String> = _mbti
     private val _screenNumber = mutableIntStateOf(0)
     val screenNumber: State<Int> = _screenNumber
 

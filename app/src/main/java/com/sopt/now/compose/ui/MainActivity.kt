@@ -1,7 +1,6 @@
 package com.sopt.now.compose.ui
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -59,7 +58,7 @@ class MainActivity : ComponentActivity() {
                     when {
                         mainViewModel.screenNumber.value == 0 -> SignUp(mainViewModel)
                         mainViewModel.screenNumber.value == 1 -> Login(mainViewModel)
-                        else -> emptyUnit()
+                        else -> Main(mainViewModel)
                     }
                 }
             }
@@ -121,7 +120,7 @@ fun Login(viewModel: MainViewModel) {
             Arrangement.Bottom
         ) {
             Button(
-                onClick = { viewModel.setScreen(1) },
+                onClick = { viewModel.setScreen(0) },
                 modifier = Modifier
                     .fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
@@ -244,16 +243,75 @@ fun SignUp(viewModel: MainViewModel) {
 fun signUpButtonEvent(viewModel: MainViewModel, user: User) {
     viewModel.setId(user.id)
     viewModel.setPassword(user.password)
-    viewModel.setPassword(user.nickname)
+    viewModel.setNickname(user.nickname)
     viewModel.setMbti(user.mbti)
     viewModel.setScreen(1)
 }
 
 @Composable
-fun emptyUnit() {
-    Text(text = "이페이지는 버그페이지입니다.")
-}
+fun Main(viewModel: MainViewModel) {
+    Column(
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxSize()
+            .background(color = Color.White),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            text ="${viewModel.nickname.value}님의 프로필",
+            textAlign = TextAlign.Center,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(
+            text = "ID",
+            textAlign = TextAlign.Start,
+            modifier = Modifier.fillMaxWidth(),
+            fontWeight = FontWeight.Bold,
+            fontSize = 15.sp,
+        )
+        Text(
+            text = "${viewModel.id.value}",
+            textAlign = TextAlign.Start,
+            modifier = Modifier.fillMaxWidth(),
+            fontSize = 15.sp,
+        )
 
+        Text(
+            text = "비밀번호",
+            textAlign = TextAlign.Start,
+            modifier = Modifier.fillMaxWidth(),
+            fontWeight = FontWeight.Bold,
+            fontSize = 15.sp,
+        )
+        Text(
+            text = "${viewModel.password.value}",
+            textAlign = TextAlign.Start,
+            modifier = Modifier.fillMaxWidth(),
+            fontSize = 15.sp,
+        )
+
+
+        Text(
+            text = "MBTI",
+            textAlign = TextAlign.Start,
+            modifier = Modifier.fillMaxWidth(),
+            fontWeight = FontWeight.Bold,
+            fontSize = 15.sp,
+            )
+        Text(
+            text = "${viewModel.mbti.value}",
+            textAlign = TextAlign.Start,
+            modifier = Modifier.fillMaxWidth(),
+            fontSize = 15.sp,
+        )
+
+    }
+}
 
 private fun loginButtonEvent(viewModel: MainViewModel, id: String, password: String) {
     if (viewModel.id.value == id && viewModel.password.value == password) viewModel.setScreen(2)
@@ -261,12 +319,6 @@ private fun loginButtonEvent(viewModel: MainViewModel, id: String, password: Str
 
 @Preview(showBackground = true)
 @Composable
-fun t() {
-    SignUp(viewModel = MainViewModel())
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
+fun LoginPreview() {
     Login(viewModel = MainViewModel())
 }

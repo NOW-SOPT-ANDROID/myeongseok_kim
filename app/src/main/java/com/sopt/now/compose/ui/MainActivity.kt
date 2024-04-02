@@ -1,6 +1,8 @@
 package com.sopt.now.compose.ui
 
+import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -27,8 +29,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,7 +54,6 @@ class MainActivity : ComponentActivity() {
             )[MainViewModel::class.java]
 
             NOWSOPTAndroidTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -96,7 +99,7 @@ fun Login(viewModel: MainViewModel) {
             value = id, onValueChange = { id = it },
             modifier = Modifier
                 .fillMaxWidth(),
-            label = { Text("사용자 이름 입력") },
+            placeholder = { Text("사용자 이름 입력") },
             singleLine = true,
         )
         Spacer(modifier = Modifier.height(30.dp))
@@ -104,16 +107,17 @@ fun Login(viewModel: MainViewModel) {
             text = "비밀번호",
             textAlign = TextAlign.Start,
             modifier = Modifier.fillMaxWidth(),
-            fontSize = 25.sp,
+            fontSize = 20.sp,
 
             )
         TextField(
             value = password, onValueChange = { password = it },
             modifier = Modifier
                 .fillMaxWidth(),
-            label = { Text("비밀번호 입력") },
+            placeholder = { Text("비밀번호 입력") },
             singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            visualTransformation = PasswordVisualTransformation()
         )
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -128,8 +132,9 @@ fun Login(viewModel: MainViewModel) {
             ) {
                 Text(text = "회원가입")
             }
+            val context = LocalContext.current
             Button(
-                onClick = { loginButtonEvent(viewModel, id, password) },
+                onClick = { loginButtonEvent(context,viewModel, id, password) },
                 modifier = Modifier
                     .fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
@@ -183,15 +188,15 @@ fun SignUp(viewModel: MainViewModel) {
             textAlign = TextAlign.Start,
             modifier = Modifier.fillMaxWidth(),
             fontSize = 15.sp,
-
-            )
+        )
         TextField(
             value = password, onValueChange = { password = it },
             modifier = Modifier
                 .fillMaxWidth(),
             placeholder = { Text("비밀번호 입력") },
             singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            visualTransformation = PasswordVisualTransformation()
         )
         Spacer(modifier = Modifier.height(20.dp))
         Text(
@@ -227,8 +232,15 @@ fun SignUp(viewModel: MainViewModel) {
             modifier = Modifier.fillMaxSize(),
             Arrangement.Bottom
         ) {
+            val context = LocalContext.current
             Button(
-                onClick = { signUpButtonEvent(viewModel, User(id, password, nickname, mbti)) },
+                onClick = {
+                    signUpButtonEvent(
+                        context = context,
+                        viewModel = viewModel,
+                        user = User(id, password, nickname, mbti)
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
@@ -240,13 +252,6 @@ fun SignUp(viewModel: MainViewModel) {
     }
 }
 
-fun signUpButtonEvent(viewModel: MainViewModel, user: User) {
-    viewModel.setId(user.id)
-    viewModel.setPassword(user.password)
-    viewModel.setNickname(user.nickname)
-    viewModel.setMbti(user.mbti)
-    viewModel.setScreen(1)
-}
 
 @Composable
 fun Main(viewModel: MainViewModel) {
@@ -259,7 +264,7 @@ fun Main(viewModel: MainViewModel) {
     ) {
         Spacer(modifier = Modifier.height(10.dp))
         Text(
-            text ="${viewModel.nickname.value}님의 프로필",
+            text = "${viewModel.nickname.value}님의 프로필",
             textAlign = TextAlign.Center,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
@@ -295,14 +300,13 @@ fun Main(viewModel: MainViewModel) {
             fontSize = 15.sp,
         )
 
-
         Text(
             text = "MBTI",
             textAlign = TextAlign.Start,
             modifier = Modifier.fillMaxWidth(),
             fontWeight = FontWeight.Bold,
             fontSize = 15.sp,
-            )
+        )
         Text(
             text = viewModel.mbti.value,
             textAlign = TextAlign.Start,
@@ -313,8 +317,64 @@ fun Main(viewModel: MainViewModel) {
     }
 }
 
-private fun loginButtonEvent(viewModel: MainViewModel, id: String, password: String) {
-    if (viewModel.id.value == id && viewModel.password.value == password) viewModel.setScreen(2)
+
+private fun loginButtonEvent(context: Context,viewModel: MainViewModel, id: String, password: String) {
+    if (validateLogin(
+            viewModel.id.value,
+            viewModel.password.value,
+            User(id, password)
+        )
+    ) {viewModel.setScreen(2)
+        toastMessage(context, message = "회원가입에 성공했습니다.")}
+}
+
+private fun validateLogin(id: String, password: String, user: User): Boolean {
+    if (id == "") return false
+    if (password == "") return false
+    if (id != user.id || password != user.password) return false
+    return true
+}
+
+
+private fun signUpButtonEvent(context: Context, viewModel: MainViewModel, user: User) {
+    if (validateUserInfo(user)) {
+        viewModel.setId(user.id)
+        viewModel.setPassword(user.password)
+        viewModel.setNickname(user.nickname)
+        viewModel.setMbti(user.mbti)
+        viewModel.setScreen(1)
+        toastMessage(context, message = "회원가입에 성공했습니다.")
+    } else {
+        toastMessage(context, message = "회원가입이 불가능합니다.")
+    }
+}
+
+private fun toastMessage(context: Context, message: String) {
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+}
+
+private fun validateUserInfo(user: User): Boolean {
+    if (validateID(user.id)) return false
+    if (validatePassword(user.password)) return false
+    if (validateNickName(user.nickname)) return false
+    if (validateMBTI(user.mbti)) return false
+    return true
+}
+
+private fun validateID(text: String): Boolean {
+    return text.length < 6 || text.length > 10
+}
+
+private fun validatePassword(text: String): Boolean {
+    return text.length < 8 || text.length > 12
+}
+
+private fun validateNickName(text: String): Boolean {
+    return text.trim().isEmpty()
+}
+
+private fun validateMBTI(text: String): Boolean {
+    return text.length != 4
 }
 
 @Preview(showBackground = true)

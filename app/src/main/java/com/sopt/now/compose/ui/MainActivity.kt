@@ -57,7 +57,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     when {
-                        mainViewModel.screenNumber.value == 0 -> Login(mainViewModel)
+                        mainViewModel.screenNumber.value == 0 -> SignUp(mainViewModel)
+                        mainViewModel.screenNumber.value == 1 -> Login(mainViewModel)
                         else -> emptyUnit()
                     }
                 }
@@ -78,7 +79,7 @@ fun Login(viewModel: MainViewModel) {
     ) {
         Spacer(modifier = Modifier.height(20.dp))
         Text(
-            text = "${viewModel.screenNumber.value}",
+            text = "Welcome to SOPT",
             textAlign = TextAlign.Center,
             fontSize = 25.sp,
             fontWeight = FontWeight.Bold,
@@ -119,7 +120,15 @@ fun Login(viewModel: MainViewModel) {
             modifier = Modifier.fillMaxSize(),
             Arrangement.Bottom
         ) {
-            Input_button(text = "회원가입", clickEvent = emptyUnit())
+            Button(
+                onClick = { viewModel.setScreen(1) },
+                modifier = Modifier
+                    .fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text(text = "회원가입")
+            }
             Button(
                 onClick = { loginButtonEvent(viewModel, id, password) },
                 modifier = Modifier
@@ -130,35 +139,131 @@ fun Login(viewModel: MainViewModel) {
                 Text(text = "입력하기")
             }
         }
-
-
     }
-}
-
-
-
-fun emptyUnit() {
-
-}
-
-
-private fun loginButtonEvent(viewModel: MainViewModel, id: String,password: String) {
-    if (viewModel.id.value == id && viewModel.password.value == password) viewModel.setScreen(1)
 }
 
 @Composable
-fun Input_button(text: String, clickEvent: Unit) {
-    Button(
-        onClick = { clickEvent},
+fun SignUp(viewModel: MainViewModel) {
+    var id by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var nickname by remember { mutableStateOf("") }
+    var mbti by remember { mutableStateOf("") }
+    Column(
         modifier = Modifier
-            .fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
-        shape = RoundedCornerShape(8.dp)
+            .padding(10.dp)
+            .fillMaxSize()
+            .background(color = Color.White),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = text)
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            text = "SIGN UP",
+            textAlign = TextAlign.Center,
+            fontSize = 15.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(
+            text = "ID",
+            textAlign = TextAlign.Start,
+            modifier = Modifier.fillMaxWidth(),
+            fontSize = 15.sp,
+        )
+        TextField(
+            value = id, onValueChange = { id = it },
+            modifier = Modifier
+                .fillMaxWidth(),
+            placeholder = { Text("아이디를 입력해주세요") },
+            singleLine = true,
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(
+            text = "비밀번호",
+            textAlign = TextAlign.Start,
+            modifier = Modifier.fillMaxWidth(),
+            fontSize = 15.sp,
+
+            )
+        TextField(
+            value = password, onValueChange = { password = it },
+            modifier = Modifier
+                .fillMaxWidth(),
+            placeholder = { Text("비밀번호 입력") },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(
+            text = "닉네임",
+            textAlign = TextAlign.Start,
+            modifier = Modifier.fillMaxWidth(),
+            fontSize = 15.sp,
+
+            )
+        TextField(
+            value = nickname, onValueChange = { nickname = it },
+            modifier = Modifier
+                .fillMaxWidth(),
+            placeholder = { Text("닉네임을 입력해주세요") },
+            singleLine = true
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(
+            text = "MBTI",
+            textAlign = TextAlign.Start,
+            modifier = Modifier.fillMaxWidth(),
+            fontSize = 15.sp,
+
+            )
+        TextField(
+            value = mbti, onValueChange = { mbti = it },
+            modifier = Modifier
+                .fillMaxWidth(),
+            placeholder = { Text("MBTI를 입력해주세요") },
+            singleLine = true
+        )
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            Arrangement.Bottom
+        ) {
+            Button(
+                onClick = { signUpButtonEvent(viewModel, User(id, password, nickname, mbti)) },
+                modifier = Modifier
+                    .fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text(text = "회원 가입하기")
+            }
+        }
     }
 }
 
+fun signUpButtonEvent(viewModel: MainViewModel, user: User) {
+    viewModel.setId(user.id)
+    viewModel.setPassword(user.password)
+    viewModel.setPassword(user.nickname)
+    viewModel.setMbti(user.mbti)
+    viewModel.setScreen(1)
+}
+
+@Composable
+fun emptyUnit() {
+    Text(text = "이페이지는 버그페이지입니다.")
+}
+
+
+private fun loginButtonEvent(viewModel: MainViewModel, id: String, password: String) {
+    if (viewModel.id.value == id && viewModel.password.value == password) viewModel.setScreen(2)
+}
+
+@Preview(showBackground = true)
+@Composable
+fun t() {
+    SignUp(viewModel = MainViewModel())
+}
 
 @Preview(showBackground = true)
 @Composable

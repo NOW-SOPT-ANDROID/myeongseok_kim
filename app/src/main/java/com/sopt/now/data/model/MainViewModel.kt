@@ -14,7 +14,7 @@ class MainViewModel() : ViewModel() {
     val nickname: State<String> = _nickname
     private val _mbti = mutableStateOf("")
     val mbti: State<String> = _mbti
-    private val _screenNumber = mutableIntStateOf(0)
+    private val _screenNumber = mutableIntStateOf(1)
     val screenNumber: State<Int> = _screenNumber
 
     fun setId(text: String) {
@@ -34,7 +34,7 @@ class MainViewModel() : ViewModel() {
     }
 
     fun setScreen(number: Int) {
-        _screenNumber.value += number
+        _screenNumber.value = number
     }
 
 

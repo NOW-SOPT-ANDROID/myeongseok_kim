@@ -23,30 +23,32 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
 
     private fun signUpEvent() {
 
-        val intent = Intent(this@SignUpActivity, SignUpActivity::class.java)
-        intent.putExtra("ID", binding.etSignupId.text.toString())
-        intent.putExtra("password", binding.etSignupPassword.text.toString())
-        intent.putExtra("nickname", binding.etSignupNickname.text.toString())
-        intent.putExtra("MBTI", binding.etSignupMBTI.text.toString())
-        setResult(RESULT_OK,intent)
-        finish()
+        Intent(this@SignUpActivity, SignUpActivity::class.java).apply {
+            putExtra(TAG_ID, binding.etSignupId.text.toString())
+            putExtra(TAG_PASSWORD, binding.etSignupPassword.text.toString())
+            putExtra(TAG_NICKNAME, binding.etSignupNickname.text.toString())
+            putExtra(TAG_MBTI, binding.etSignupMBTI.text.toString())
+            setResult(RESULT_OK, this)
+            finish()
+        }
+
     }
 
     private fun validateSignUp(): Boolean {
         if (validateID()) {
-            Toast.makeText(this, "ID입력 조건에 맞지 않습니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, VALIDATE_ID, Toast.LENGTH_SHORT).show()
             return false
         }
         if (validatePassword()) {
-            Toast.makeText(this, "비밀번호 입력 조건에 맞지 않습니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, VALIDATE_PASSWORD, Toast.LENGTH_SHORT).show()
             return false
         }
         if (validateNickName()) {
-            Toast.makeText(this, "닉네임 입력 조건에 맞지 않습니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, VALIDATE_NICKNAME, Toast.LENGTH_SHORT).show()
             return false
         }
         if (validateMBTI()) {
-            Toast.makeText(this, "MBTI 입력 조건에 맞지 않습니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, VALIDATE_MBTI, Toast.LENGTH_SHORT).show()
             return false
         }
         return true
@@ -73,5 +75,16 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
         return text != 4
     }
 
+    companion object {
+        const val TAG_USER = "user"
+        const val TAG_ID = "id"
+        const val TAG_PASSWORD = "password"
+        const val TAG_NICKNAME = "nickname"
+        const val TAG_MBTI = "mbti"
+        const val VALIDATE_ID = "ID입력 조건에 맞지 않습니다."
+        const val VALIDATE_PASSWORD = "비밀번호 입력 조건에 맞지 않습니다."
+        const val VALIDATE_NICKNAME = "닉네임 입력 조건에 맞지 않습니다."
+        const val VALIDATE_MBTI = "MBTI 입력 조건에 맞지 않습니다."
+    }
 
 }

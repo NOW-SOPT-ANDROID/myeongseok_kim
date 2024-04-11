@@ -1,8 +1,9 @@
 package com.sopt.now.ui
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
+import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.sopt.now.R
@@ -10,20 +11,20 @@ import com.sopt.now.data.User
 import com.sopt.now.databinding.ActivityLoginBinding
 
 import com.sopt.now.util.BindingActivity
+import com.sopt.now.util.getSafeParcelable
+import com.sopt.now.util.toast
 
 class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_login) {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-    private var id = ""
-    private var password = ""
-    private var mbti = ""
-    private var nickname = ""
+
+    private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        init()
+        initLayout()
     }
 
-    private fun init() {
+    private fun initLayout() {
         setResultNext()
         initButton()
     }
@@ -39,15 +40,16 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
     }
 
     private fun initSignUpBtnClickListener() {
-        Intent(this, SignUpActivity::class.java).apply {
-            resultLauncher.launch(this)
+        Intent(this, SignUpActivity::class.java).let {
+            resultLauncher.launch(it)
         }
     }
 
     private fun initLoginBtnClickListener() {
         if (validateLogin()) {
-            Intent(this, MainActivity::class.java).apply {
-                putExtra(TAG_USER, User(id, password, nickname, mbti))
+            val intent = Intent(this, MainActivity::class.java)
+            with(intent) {
+                putExtra(TAG_USER, user)
                 startActivity(this)
             }
         }
@@ -58,40 +60,38 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
             if (result.resultCode == RESULT_OK) {
-                id = result.data?.getStringExtra(TAG_ID) ?: ""
-                password = result.data?.getStringExtra(TAG_PASSWORD) ?: ""
-                nickname = result.data?.getStringExtra(TAG_NICKNAME) ?: ""
-                mbti = result.data?.getStringExtra(TAG_MBTI) ?: ""
-                binding.etLoginId.setText(id)
-                binding.etLoginPassword.setText(password)
+                val data = result.data?.getSafeParcelable<User>(TAG_USER)
+                data?.let {
+                    user = it
+                    binding.etLoginId.setText(user.id)
+                    binding.etLoginPassword.setText(user.password)
+                }
             }
         }
     }
 
     private fun validateLogin(): Boolean {
-        if (id == "" || password == "") {
-            Toast.makeText(this, TOAST_NO_REGISTER, Toast.LENGTH_SHORT).show()
+        return validateId() && validatePassword()
+    }
+
+    private fun validateId(): Boolean {
+        require(binding.etLoginId.text.toString() == user.id) {
+            toast(TOAST_NOT_EQUAL_ID)
             return false
         }
-        if (binding.etLoginId.text.toString() != id) {
-            Toast.makeText(this, TOAST_NOT_EQUAL_ID, Toast.LENGTH_SHORT).show()
-            return false
-        }
-        if (binding.etLoginPassword.text.toString() != password) {
-            Toast.makeText(this, TOAST_NOT_EQUAL_PASSWORD, Toast.LENGTH_SHORT).show()
+        return true
+    }
+
+    private fun validatePassword(): Boolean {
+        require(binding.etLoginPassword.text.toString() == user.password) {
+            toast(TOAST_NOT_EQUAL_PASSWORD)
             return false
         }
         return true
     }
 
     companion object {
-        const val TAG_USER ="user"
-        const val TAG_ID = "id"
-        const val TAG_PASSWORD = "password"
-        const val TAG_NICKNAME = "nickname"
-        const val TAG_MBTI = "mbti"
-
-        const val TOAST_NO_REGISTER = "회원정보가 없습니다."
+        const val TAG_USER = "user"
         const val TOAST_NOT_EQUAL_ID = "아이디가 일치하지 않습니다."
         const val TOAST_NOT_EQUAL_PASSWORD = "비밀번호가 일치하지 않습니다."
     }

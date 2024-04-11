@@ -2,18 +2,20 @@ package com.sopt.now.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import com.sopt.now.R
+import com.sopt.now.data.User
 import com.sopt.now.databinding.ActivitySignUpBinding
+import com.sopt.now.ui.LoginActivity.Companion.TAG_USER
 import com.sopt.now.util.BindingActivity
+import com.sopt.now.util.toast
 
 class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_sign_up) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        init()
+        initLayout()
     }
 
-    private fun init() {
+    private fun initLayout() {
         initButton()
     }
 
@@ -22,65 +24,56 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
     }
 
     private fun signUpEvent() {
-
-        Intent(this@SignUpActivity, SignUpActivity::class.java).apply {
-            putExtra(TAG_ID, binding.etSignupId.text.toString())
-            putExtra(TAG_PASSWORD, binding.etSignupPassword.text.toString())
-            putExtra(TAG_NICKNAME, binding.etSignupNickname.text.toString())
-            putExtra(TAG_MBTI, binding.etSignupMBTI.text.toString())
-            setResult(RESULT_OK, this)
-            finish()
-        }
+        val intent = Intent(this@SignUpActivity, SignUpActivity::class.java)
+        intent.putExtra(
+            TAG_USER, User(
+                id = binding.etSignupId.text.toString(),
+                password = binding.etSignupPassword.text.toString(),
+                nickname = binding.etSignupNickname.text.toString(),
+                mbti = binding.etSignupMBTI.text.toString()
+            )
+        )
+        setResult(RESULT_OK, intent)
+        finish()
 
     }
 
-    private fun validateSignUp(): Boolean {
-        if (validateID()) {
-            Toast.makeText(this, VALIDATE_ID, Toast.LENGTH_SHORT).show()
-            return false
-        }
-        if (validatePassword()) {
-            Toast.makeText(this, VALIDATE_PASSWORD, Toast.LENGTH_SHORT).show()
-            return false
-        }
-        if (validateNickName()) {
-            Toast.makeText(this, VALIDATE_NICKNAME, Toast.LENGTH_SHORT).show()
-            return false
-        }
-        if (validateMBTI()) {
-            Toast.makeText(this, VALIDATE_MBTI, Toast.LENGTH_SHORT).show()
+    private fun validateSignUp() =
+        validateID() && validatePassword() && validateNickName() && validateMBTI()
+
+    private fun validateID(): Boolean {
+        require(binding.etSignupId.text.length in 6..10) {
+            toast(VALIDATE_ID)
             return false
         }
         return true
-
-    }
-
-    private fun validateID(): Boolean {
-        val text = binding.etSignupId.text.length
-        return text < 6 || text > 10
     }
 
     private fun validatePassword(): Boolean {
-        val text = binding.etSignupPassword.text.length
-        return text < 8 || text > 12
+        require(binding.etSignupPassword.text.length in 8..12) {
+            toast(VALIDATE_PASSWORD)
+            return false
+        }
+        return true
     }
 
     private fun validateNickName(): Boolean {
-        var text = binding.etSignupNickname.text
-        return text.trim().isEmpty()
+        require(binding.etSignupNickname.text.isNotBlank()) {
+            toast(VALIDATE_NICKNAME)
+            return false
+        }
+        return true
     }
 
     private fun validateMBTI(): Boolean {
-        var text = binding.etSignupMBTI.text.length
-        return text != 4
+        require(binding.etSignupMBTI.text.length == 4) {
+            toast(VALIDATE_MBTI)
+            return false
+        }
+        return true
     }
 
     companion object {
-        const val TAG_USER = "user"
-        const val TAG_ID = "id"
-        const val TAG_PASSWORD = "password"
-        const val TAG_NICKNAME = "nickname"
-        const val TAG_MBTI = "mbti"
         const val VALIDATE_ID = "ID입력 조건에 맞지 않습니다."
         const val VALIDATE_PASSWORD = "비밀번호 입력 조건에 맞지 않습니다."
         const val VALIDATE_NICKNAME = "닉네임 입력 조건에 맞지 않습니다."

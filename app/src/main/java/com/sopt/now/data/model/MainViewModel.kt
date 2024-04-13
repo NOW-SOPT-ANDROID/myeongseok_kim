@@ -6,13 +6,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 
 class MainViewModel() : ViewModel() {
-    private val _id = mutableStateOf("")
+    private var _id = mutableStateOf("")
     val id: State<String> = _id
-    private val _password = mutableStateOf("")
+    private var _password = mutableStateOf("")
     val password: State<String> = _password
-    private val _nickname = mutableStateOf("")
+    private var _nickname = mutableStateOf("")
     val nickname: State<String> = _nickname
-    private val _mbti = mutableStateOf("")
+    private var _mbti = mutableStateOf("")
     val mbti: State<String> = _mbti
     private val _screenNumber = mutableIntStateOf(1)
     val screenNumber: State<Int> = _screenNumber

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,24 +20,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
+import com.sopt.now.compose.R
+import com.sopt.now.compose.component.text.TextWithTitle
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
 import com.sopt.now.data.model.MainViewModel
-import com.sopt.now.util.MainViewModelFactory
 
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val mainViewModel = ViewModelProvider(
-                this,
-                MainViewModelFactory()
-            )[MainViewModel::class.java]
+            val mainViewModel: MainViewModel by viewModels()
             NOWSOPTAndroidTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -63,61 +62,35 @@ fun Main(viewModel: MainViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(10.dp))
+
         Text(
-            text = "${viewModel.nickname.value}님의 프로필",
+            text = stringResource(id = R.string.main_title).format(viewModel.nickname.value),
             textAlign = TextAlign.Center,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .fillMaxWidth()
         )
+
         Spacer(modifier = Modifier.height(20.dp))
-        Text(
-            text = "ID",
-            textAlign = TextAlign.Start,
-            modifier = Modifier.fillMaxWidth(),
-            fontWeight = FontWeight.Bold,
-            fontSize = 15.sp,
-        )
-        Text(
-            text = viewModel.id.value,
-            textAlign = TextAlign.Start,
-            modifier = Modifier.fillMaxWidth(),
-            fontSize = 15.sp,
-        )
 
-        Text(
-            text = "비밀번호",
-            textAlign = TextAlign.Start,
-            modifier = Modifier.fillMaxWidth(),
-            fontWeight = FontWeight.Bold,
-            fontSize = 15.sp,
+        TextWithTitle(
+            title = stringResource(id = R.string.all_id),
+            contents = viewModel.id.value
         )
-        Text(
-            text = viewModel.password.value,
-            textAlign = TextAlign.Start,
-            modifier = Modifier.fillMaxWidth(),
-            fontSize = 15.sp,
+        TextWithTitle(
+            title = stringResource(id = R.string.all_password),
+            contents = viewModel.password.value
         )
-
-        Text(
-            text = "MBTI",
-            textAlign = TextAlign.Start,
-            modifier = Modifier.fillMaxWidth(),
-            fontWeight = FontWeight.Bold,
-            fontSize = 15.sp,
-        )
-        Text(
-            text = viewModel.mbti.value,
-            textAlign = TextAlign.Start,
-            modifier = Modifier.fillMaxWidth(),
-            fontSize = 15.sp,
+        TextWithTitle(
+            title = stringResource(id = R.string.all_mbti),
+            contents = viewModel.mbti.value
         )
 
     }
 }
 
-fun toastMessage(context: Context, message: String) {
+fun toastMessage(context: Context, message: Int) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
 

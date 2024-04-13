@@ -9,11 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,16 +21,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sopt.now.compose.R
+import com.sopt.now.compose.component.textfield.TextFieldWithTitle
 import com.sopt.now.data.model.MainViewModel
 import com.sopt.now.data.model.User
-
 
 @Composable
 fun Login(viewModel: MainViewModel) {
@@ -46,7 +45,7 @@ fun Login(viewModel: MainViewModel) {
     ) {
         Spacer(modifier = Modifier.height(20.dp))
         Text(
-            text = "Welcome to SOPT",
+            text = stringResource(id = R.string.login_welcome),
             textAlign = TextAlign.Center,
             fontSize = 25.sp,
             fontWeight = FontWeight.Bold,
@@ -54,35 +53,19 @@ fun Login(viewModel: MainViewModel) {
                 .fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(30.dp))
-        Text(
-            text = "ID",
-            textAlign = TextAlign.Start,
-            modifier = Modifier.fillMaxWidth(),
-            fontSize = 20.sp,
-        )
-        TextField(
-            value = id, onValueChange = { id = it },
-            modifier = Modifier
-                .fillMaxWidth(),
-            placeholder = { Text("사용자 이름 입력") },
-            singleLine = true,
+        TextFieldWithTitle(
+            title = stringResource(id = R.string.all_id),
+            value = id,
+            onValueChanged = { id = it },
+            description = stringResource(id = R.string.all_id_hint)
         )
         Spacer(modifier = Modifier.height(30.dp))
-        Text(
-            text = "비밀번호",
-            textAlign = TextAlign.Start,
-            modifier = Modifier.fillMaxWidth(),
-            fontSize = 20.sp,
-
-            )
-        TextField(
-            value = password, onValueChange = { password = it },
-            modifier = Modifier
-                .fillMaxWidth(),
-            placeholder = { Text("비밀번호 입력") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            visualTransformation = PasswordVisualTransformation()
+        TextFieldWithTitle(
+            title = stringResource(id = R.string.all_password),
+            value = password,
+            onValueChanged = { password = it },
+            description = stringResource(id = R.string.all_password_hint),
+            keyboardType = KeyboardType.Password
         )
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -95,7 +78,7 @@ fun Login(viewModel: MainViewModel) {
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text(text = "회원가입")
+                Text(text = stringResource(id = R.string.all_enroll))
             }
             val context = LocalContext.current
             Button(
@@ -105,7 +88,7 @@ fun Login(viewModel: MainViewModel) {
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text(text = "입력하기")
+                Text(text = stringResource(id = R.string.all_input))
             }
         }
     }
@@ -120,20 +103,21 @@ private fun loginButtonEvent(
     if (validateLogin(
             viewModel.id.value,
             viewModel.password.value,
-            User(id, password)
+            User(id, password, "", "")
         )
     ) {
         viewModel.setScreen(2)
-        toastMessage(context, message = "회원가입에 성공했습니다.")
+        toastMessage(context, message =R.string.login_Success)
     }
 }
 
-private fun validateLogin(id: String, password: String, user: User): Boolean {
-    if (id == "") return false
-    if (password == "") return false
-    if (id != user.id || password != user.password) return false
-    return true
-}
+private fun validateLogin(id: String, password: String, user: User): Boolean =
+    validateID(id, user) && validatePassword(password, user)
+
+private fun validateID(id: String, user: User): Boolean = id.isNotBlank() && id == user.id
+
+private fun validatePassword(password: String, user: User): Boolean =
+    password.isNotBlank() && password == user.password
 
 @Preview(showBackground = true)
 @Composable

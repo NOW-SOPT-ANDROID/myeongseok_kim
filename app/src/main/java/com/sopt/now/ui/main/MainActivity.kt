@@ -1,10 +1,10 @@
-package com.sopt.now.ui
+package com.sopt.now.ui.main
 
 import android.os.Bundle
 import com.sopt.now.R
 import com.sopt.now.data.User
 import com.sopt.now.databinding.ActivityMainBinding
-import com.sopt.now.ui.LoginActivity.Companion.TAG_USER
+import com.sopt.now.ui.login.LoginActivity.Companion.TAG_USER
 import com.sopt.now.util.BindingActivity
 import com.sopt.now.util.getSafeParcelable
 

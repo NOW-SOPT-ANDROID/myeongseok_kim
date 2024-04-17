@@ -20,15 +20,19 @@ class MainViewModel : ViewModel() {
             )
     }
 
-    fun inputMyProfile(data: User) {
+    fun setMyProfile(data: User) {
         _myProfile.value = data
+    }
+
+    fun updateProfileWithMyProfile() {
         _userData.value =
             listOf(
-                Profile.myProfile(data.nickname, data.mbti),
-                Profile.frilendsProfile(
-                    "배찬우", "INFP"
-                ),
-                Profile.frilendsProfile("배찬우", "INFP"),
+                Profile.myProfile(_myProfile.value!!.nickname, _myProfile.value!!.mbti),
+                Profile.frilendsProfile("주효은", "INFP"),
+                Profile.frilendsProfile("이유빈", "ENFP"),
+                Profile.frilendsProfile("김민우", "ISTP"),
+                Profile.frilendsProfile("곽의진", "CUTE"),//자기소개에서 발췌
+                Profile.frilendsProfile("유정현", "ESTJ"),
             )
     }
 }

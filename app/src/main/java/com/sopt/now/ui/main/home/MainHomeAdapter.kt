@@ -1,18 +1,17 @@
-package com.sopt.now.ui.main.adapter
+package com.sopt.now.ui.main.home
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.sopt.now.data.User
+import com.sopt.now.data.Profile
 import com.sopt.now.databinding.ItemHomeFeedBinding
 import com.sopt.now.databinding.ItemHomeFeedMeBinding
-import java.lang.RuntimeException
 
-class MainHomeAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MainHomeAdapter(context: Context) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val inflater by lazy { LayoutInflater.from(context) }
-    private val userList = mutableListOf<User>()
-    private lateinit var me :User
+    private val userList = mutableListOf<Profile>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -34,26 +33,21 @@ class MainHomeAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.View
 
     override fun getItemCount(): Int = userList.size
 
-    override fun getItemViewType(position: Int): Int = when (position) {
-        0 -> ME
-        else -> FRIENDS
+    override fun getItemViewType(position: Int): Int = when (userList[position]) {
+        is Profile.myProfile -> ME
+        is Profile.frilendsProfile -> FRIENDS
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is MainHomeMeViewHolder -> holder.onBind(userList[position])
-            is MainHomeViewHolder -> holder.onBind(userList[position])
+            is MainHomeMeViewHolder -> holder.onBind(userList[position] as Profile.myProfile)
+            is MainHomeViewHolder -> holder.onBind(userList[position] as Profile.frilendsProfile)
         }
     }
 
-    fun setUserList(dataList: List<User>) {
+    fun setUserList(dataList: List<Profile>) {
         userList.clear()
         userList.addAll(dataList)
-        notifyDataSetChanged()
-    }
-
-    fun setMyData(user: User) {
-        me = user
         notifyDataSetChanged()
     }
 

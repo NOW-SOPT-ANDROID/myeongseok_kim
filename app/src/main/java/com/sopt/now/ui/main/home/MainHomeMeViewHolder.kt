@@ -1,14 +1,14 @@
-package com.sopt.now.ui.main.adapter
+package com.sopt.now.ui.main.home
 
 import androidx.recyclerview.widget.RecyclerView
-import com.sopt.now.data.User
+import com.sopt.now.data.Profile
 import com.sopt.now.databinding.ItemHomeFeedMeBinding
 
 class MainHomeMeViewHolder(private val binding: ItemHomeFeedMeBinding) :
     RecyclerView.ViewHolder(binding.root) {
-    fun onBind(userData: User) {
+    fun onBind(userData: Profile.myProfile) {
         binding.run {
-            tvHomeFeedMeName.text = userData.nickname
+            tvHomeFeedMeName.text = userData.name
             tvHomeFeedMeMbti.text = userData.mbti
         }
     }

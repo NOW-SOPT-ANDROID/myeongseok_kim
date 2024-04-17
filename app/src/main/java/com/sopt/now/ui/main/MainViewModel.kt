@@ -2,33 +2,32 @@ package com.sopt.now.ui.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.sopt.now.data.User
+import com.sopt.now.data.Profile
 
 class MainViewModel : ViewModel() {
-    private val _userData = MutableLiveData<List<User>>()
+    private val _userData = MutableLiveData<List<Profile>>()
     val userData = _userData
 
-    private val _myData = MutableLiveData<User>()
-    val myData = _myData
+    private val _myProfile = MutableLiveData<Profile.myProfile>()
+    val myProfile = _myProfile
 
     init {
         _userData.value =
             listOf(
-                User("", "", "배찬우", "infp"),
-                User("", "", "김민우", "intp"),
-                User("", "", "", ""),
-                User("", "", "", ""),
-                User("", "", "", ""),
-                User("", "", "", ""),
-                User("", "", "", ""),
-                User("", "", "", ""),
-                User("", "", "", ""),
-                User("", "", "", ""),
+                Profile.frilendsProfile("배찬우", "INFP"),
+                Profile.frilendsProfile("배찬우", "INFP"),
             )
     }
 
-    fun setMydata(user: User) {
-        myData.value = user
+    fun inputMyProfile(data: Profile.myProfile) {
+        _myProfile.value = data
+        _userData.value =
+            listOf(
+                data,
+                Profile.frilendsProfile(
+                    "배찬우", "INFP"
+                ),
+                Profile.frilendsProfile("배찬우", "INFP"),
+            )
     }
-
 }

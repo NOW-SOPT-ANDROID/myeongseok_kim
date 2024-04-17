@@ -14,71 +14,14 @@
         android:padding="20dp"
         tools:context=".ui.main.MainActivity">
 
-        <TextView
-            android:id="@+id/tv_main_nickname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="35sp"
-            android:textStyle="bold"
+        <FrameLayout
+            android:id="@+id/fcv_main"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_main_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="@string/all_id"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_main_nickname" />
-
-        <TextView
-            android:id="@+id/tv_main_id_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_main_id" />
-
-        <TextView
-            android:id="@+id/tv_main_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="@string/all_password"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_main_id_content" />
-
-        <TextView
-            android:id="@+id/tv_main_password_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_main_password" />
-
-        <TextView
-            android:id="@+id/tv_main_mbti"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="@string/singUp_MBTI"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_main_password_content" />
-
-        <TextView
-            android:id="@+id/tv_main_mbti_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_main_mbti" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

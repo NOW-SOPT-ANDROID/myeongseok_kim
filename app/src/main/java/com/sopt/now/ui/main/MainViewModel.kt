@@ -3,12 +3,13 @@ package com.sopt.now.ui.main
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sopt.now.data.Profile
+import com.sopt.now.data.User
 
 class MainViewModel : ViewModel() {
     private val _userData = MutableLiveData<List<Profile>>()
     val userData = _userData
 
-    private val _myProfile = MutableLiveData<Profile.myProfile>()
+    private val _myProfile = MutableLiveData<User>()
     val myProfile = _myProfile
 
     init {
@@ -19,11 +20,11 @@ class MainViewModel : ViewModel() {
             )
     }
 
-    fun inputMyProfile(data: Profile.myProfile) {
+    fun inputMyProfile(data: User) {
         _myProfile.value = data
         _userData.value =
             listOf(
-                data,
+                Profile.myProfile(data.nickname, data.mbti),
                 Profile.frilendsProfile(
                     "배찬우", "INFP"
                 ),

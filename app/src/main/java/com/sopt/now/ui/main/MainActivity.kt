@@ -7,14 +7,12 @@ import com.sopt.now.data.Profile
 import com.sopt.now.data.User
 import com.sopt.now.databinding.ActivityMainBinding
 import com.sopt.now.ui.login.LoginActivity.Companion.TAG_USER
-import com.sopt.now.ui.main.home.MainHomeAdapter
 import com.sopt.now.ui.main.home.MainHomeFragment
 import com.sopt.now.util.BindingActivity
 import com.sopt.now.util.getSafeParcelable
 
 class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val viewModel by viewModels<MainViewModel>()
-    private lateinit var mainHomeAdapter: MainHomeAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,8 +21,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
 
     private fun initLayout() {
         initMainFragment()
-//        initViewmodel()
-//        initAdapter()
+        inputData()
     }
 
     private fun initMainFragment() {
@@ -36,14 +33,9 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         }
     }
 
-    private fun initAdapter() {
+    private fun inputData() {
         val user = intent.getSafeParcelable<User>(TAG_USER)
-        if (user != null) viewModel.inputMyProfile(Profile.myProfile(user.nickname, user.mbti))
+        if (user != null) viewModel.inputMyProfile(user)
     }
 
-    private fun initViewmodel() {
-        viewModel.userData.observe(this) { userdata->
-            mainHomeAdapter.setUserList(userdata)
-        }
-    }
 }

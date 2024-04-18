@@ -1,4 +1,4 @@
-package com.sopt.now.compose.ui.main
+package com.sopt.now.compose.ui.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

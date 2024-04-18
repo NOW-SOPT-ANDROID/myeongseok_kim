@@ -8,7 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.sopt.now.compose.ui.login.Login
-import com.sopt.now.compose.ui.main.Home
+import com.sopt.now.compose.ui.home.Home
 import com.sopt.now.compose.ui.signup.SignUp
 import com.sopt.now.data.model.UserViewModel
 

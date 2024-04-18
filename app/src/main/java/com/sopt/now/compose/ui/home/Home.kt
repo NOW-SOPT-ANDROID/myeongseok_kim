@@ -1,7 +1,6 @@
-package com.sopt.now.compose.ui.main
+package com.sopt.now.compose.ui.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize

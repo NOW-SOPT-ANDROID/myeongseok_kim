@@ -110,8 +110,8 @@ private fun loginButtonEvent(
     navHostController: NavHostController
 ) {
     if (validateLogin(
-            id = viewModel.myProfile.value!!.id,
-            password = viewModel.myProfile.value!!.id,
+            id = viewModel.myInfo.value.id,
+            password = viewModel.myInfo.value.password,
             user = User(id, password, "", "")
         )
     ) {

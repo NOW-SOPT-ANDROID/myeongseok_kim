@@ -1,4 +1,4 @@
-package com.sopt.now.compose.ui
+package com.sopt.now.compose.ui.signup
 
 import android.content.Context
 import androidx.compose.foundation.background
@@ -29,13 +29,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.sopt.now.compose.R
 import com.sopt.now.compose.component.textfield.TextFieldWithTitle
-import com.sopt.now.data.model.MainViewModel
+import com.sopt.now.data.model.UserViewModel
 import com.sopt.now.data.model.User
+import com.sopt.now.compose.component.toastMessage
+import com.sopt.now.compose.navigation.Screen
+
 
 @Composable
-fun SignUp(viewModel: MainViewModel) {
+fun SignUp(navHostController: NavHostController, viewModel: UserViewModel) {
     var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var nickname by remember { mutableStateOf("") }
@@ -104,7 +109,8 @@ fun SignUp(viewModel: MainViewModel) {
                     signUpButtonEvent(
                         context = context,
                         viewModel = viewModel,
-                        user = User(id, password, nickname, mbti)
+                        user = User(id, password, nickname, mbti),
+                        navHostController = navHostController
                     )
                 },
                 modifier = Modifier
@@ -118,18 +124,20 @@ fun SignUp(viewModel: MainViewModel) {
     }
 }
 
-private fun signUpButtonEvent(context: Context, viewModel: MainViewModel, user: User) {
+private fun signUpButtonEvent(
+    context: Context,
+    viewModel: UserViewModel,
+    user: User,
+    navHostController: NavHostController
+) {
     if (validateUserInfo(user)) {
         with(viewModel) {
-            setId(user.id)
-            setPassword(user.password)
-            setNickname(user.nickname)
-            setMbti(user.mbti)
-            setScreen(1)
+            setMyProfile(user)
         }
-        toastMessage(context, message =  R.string.singUp_Success)
+        navHostController.navigate(Screen.Login.route)
+        context.toastMessage(R.string.singUp_Success)
     } else {
-        toastMessage(context, message =  R.string.singUp_failure)
+        context.toastMessage(R.string.singUp_failure)
     }
 }
 
@@ -149,5 +157,6 @@ private fun validateMBTI(text: String): Boolean = text.length == 4
 @Preview(showBackground = true)
 @Composable
 fun SignUPPreview() {
-    SignUp(viewModel = MainViewModel())
+    val navHostController = rememberNavController()
+    SignUp(navHostController = navHostController, viewModel = UserViewModel())
 }

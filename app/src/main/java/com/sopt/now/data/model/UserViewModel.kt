@@ -1,11 +1,11 @@
-package com.sopt.now.compose.ui.main
+package com.sopt.now.data.model
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sopt.now.data.model.Profile
 import com.sopt.now.data.model.User
 
-class MainViewModel() : ViewModel() {
+class UserViewModel() : ViewModel() {
     private val _userData = MutableLiveData<List<Profile>>()
     val userData = _userData
 

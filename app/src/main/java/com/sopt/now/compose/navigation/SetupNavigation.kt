@@ -9,33 +9,32 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.sopt.now.compose.ui.login.Login
 import com.sopt.now.compose.ui.main.Home
-import com.sopt.now.compose.ui.main.MainViewModel
+import com.sopt.now.compose.ui.signup.SignUp
+import com.sopt.now.data.model.UserViewModel
 import com.sopt.now.data.model.User
 
 @Composable
 fun SetupNavigation(navController: NavHostController) {
-    val startDest: String = Screen.Home.route
-    val userViewModel: MainViewModel = viewModel(LocalContext.current as ViewModelStoreOwner)
+    val startDest: String = Screen.Login.route
+    val userViewModel: UserViewModel = viewModel(LocalContext.current as ViewModelStoreOwner)
 
     NavHost(
         navController = navController,
         startDestination = startDest
     ) {
         composable(route = Screen.Home.route) {
-            Home(navHostController = navController, User("", "", "", ""))
+            Home(
+                navHostController = navController,
+                userViewModel.myProfile.value ?: User("", "", "", "")
+            )
         }
 
         composable(route = Screen.Login.route) {
             Login(navHostController = navController, viewModel = userViewModel)
         }
 
-//        composable("${Screen.DoneApp.route}/{move}")
-//        { backStackEntry ->
-//            Paywindow2(
-//                navHostController = navController,
-//                route = backStackEntry.arguments?.getString("move") ?: "${Screen.Home.route}"
-//            )
-//        }
-
+        composable(route = Screen.SignUp.route) {
+            SignUp(navHostController = navController, viewModel = userViewModel)
+        }
     }
 }

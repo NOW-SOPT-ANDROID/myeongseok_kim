@@ -68,5 +68,6 @@ fun Home(navHostController: NavHostController, mydata: User) {
 fun PreviewHome(){
     val navCtrl = rememberNavController()
     Home(navCtrl,User("id","1234","test","enfp"))
+
 }
 

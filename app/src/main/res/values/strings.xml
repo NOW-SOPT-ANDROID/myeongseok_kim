@@ -23,6 +23,6 @@
     <string name="singUp_failure">회원가입에 실패하였습니다</string>
 
     <!--main-->
-    <string name="main_title">$s님의 프로필</string>
+    <string name="main_title">%s 님의 프로필</string>
 
 </resources>

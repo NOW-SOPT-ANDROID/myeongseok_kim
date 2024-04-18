@@ -11,7 +11,6 @@ import com.sopt.now.compose.ui.login.Login
 import com.sopt.now.compose.ui.main.Home
 import com.sopt.now.compose.ui.signup.SignUp
 import com.sopt.now.data.model.UserViewModel
-import com.sopt.now.data.model.User
 
 @Composable
 fun SetupNavigation(navController: NavHostController) {
@@ -23,10 +22,7 @@ fun SetupNavigation(navController: NavHostController) {
         startDestination = startDest
     ) {
         composable(route = Screen.Home.route) {
-            Home(
-                navHostController = navController,
-                userViewModel.myProfile.value ?: User("", "", "", "")
-            )
+            Home(navHostController = navController, viewModel = userViewModel)
         }
 
         composable(route = Screen.Login.route) {

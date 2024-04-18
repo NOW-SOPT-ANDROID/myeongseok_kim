@@ -24,5 +24,8 @@
 
     <!--main-->
     <string name="main_title">%s 님의 프로필</string>
+    <string name="main_home">홈</string>
+    <string name="main_search">검색</string>
+    <string name="main_profile">프로필</string>
 
 </resources>

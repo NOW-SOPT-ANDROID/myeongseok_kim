@@ -1,4 +1,4 @@
-package com.sopt.now.compose
+package com.sopt.now
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

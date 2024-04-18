@@ -61,14 +61,12 @@ fun Home(navHostController: NavHostController, viewModel: UserViewModel) {
         bottomBar = { BottomNavigation(selectedItem, { selectedItem = it }, items) }
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.padding(innerPadding)
         ) {
             when (selectedItem) {
                 0 -> HomeScreen(viewModel)
                 1 -> SearchScreen()
-                2 -> MyProfileScreen(navHostController, viewModel.myInfo.value)
+                2 -> MyProfileScreen(viewModel.myInfo.value)
             }
         }
     }
@@ -99,7 +97,7 @@ fun SearchScreen() {
 }
 
 @Composable
-fun MyProfileScreen(navHostController: NavHostController, myInfo: User) {
+fun MyProfileScreen(myInfo: User) {
     Column(
         modifier = Modifier
             .padding(10.dp)

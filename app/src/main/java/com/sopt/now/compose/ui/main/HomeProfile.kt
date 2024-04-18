@@ -83,12 +83,12 @@ fun HomeFriendsProfile(data: Profile.FriendProfile) {
 
 @Preview
 @Composable
-fun previewMyProfile() {
+fun PreviewMyProfile() {
     HomeMyProfile(data = Profile.MyProfile(R.drawable.img_profile, "명석", "enfp"))
 }
 
 @Preview
 @Composable
-fun previewFriendsProfile() {
+fun PreviewFriendsProfile() {
     HomeFriendsProfile(data = Profile.FriendProfile(R.drawable.img_profile, "의진", "CUTE"))
 }

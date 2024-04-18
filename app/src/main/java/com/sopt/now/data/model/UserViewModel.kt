@@ -25,27 +25,25 @@ class UserViewModel() : ViewModel() {
         _userData.addAll(
             listOf(
                 Profile.FriendProfile(R.drawable.img_profile, "주효은", "INFP"),
+                Profile.FriendProfile(R.drawable.img_profile, "배찬우", "INFP"),
                 Profile.FriendProfile(R.drawable.img_profile, "이유빈", "ENFP"),
                 Profile.FriendProfile(R.drawable.img_profile, "김민우", "ISTP"),
                 Profile.FriendProfile(R.drawable.img_profile, "곽의진", "CUTE"),//자기소개에서 발췌
-                Profile.FriendProfile(R.drawable.img_profile, "유정현", "ESTJ"),
                 Profile.FriendProfile(R.drawable.img_profile, "주효은", "INFP"),
+                Profile.FriendProfile(R.drawable.img_profile, "배찬우", "INFP"),
                 Profile.FriendProfile(R.drawable.img_profile, "이유빈", "ENFP"),
                 Profile.FriendProfile(R.drawable.img_profile, "김민우", "ISTP"),
                 Profile.FriendProfile(R.drawable.img_profile, "곽의진", "CUTE"),//자기소개에서 발췌
-                Profile.FriendProfile(R.drawable.img_profile, "유정현", "ESTJ"),
                 Profile.FriendProfile(R.drawable.img_profile, "주효은", "INFP"),
+                Profile.FriendProfile(R.drawable.img_profile, "배찬우", "INFP"),
                 Profile.FriendProfile(R.drawable.img_profile, "이유빈", "ENFP"),
                 Profile.FriendProfile(R.drawable.img_profile, "김민우", "ISTP"),
                 Profile.FriendProfile(R.drawable.img_profile, "곽의진", "CUTE"),//자기소개에서 발췌
-                Profile.FriendProfile(R.drawable.img_profile, "유정현", "ESTJ"),
                 Profile.FriendProfile(R.drawable.img_profile, "주효은", "INFP"),
+                Profile.FriendProfile(R.drawable.img_profile, "배찬우", "INFP"),
                 Profile.FriendProfile(R.drawable.img_profile, "이유빈", "ENFP"),
                 Profile.FriendProfile(R.drawable.img_profile, "김민우", "ISTP"),
                 Profile.FriendProfile(R.drawable.img_profile, "곽의진", "CUTE"),//자기소개에서 발췌
-                Profile.FriendProfile(R.drawable.img_profile, "유정현", "ESTJ"),
-
-
             )
         )
     }
@@ -58,9 +56,9 @@ class UserViewModel() : ViewModel() {
             data.mbti
         )
     }
-
-    fun updateUserData(friends: List<Profile.FriendProfile>) {
-        _userData.clear()
-        _userData.addAll(friends)
-    }
+//  추후 추가할 기능
+//    fun updateUserData(friends: List<Profile.FriendProfile>) {
+//        _userData.clear()
+//        _userData.addAll(friends)
+//    }
 }

@@ -1,4 +1,4 @@
-package com.sopt.now.compose.ui
+package com.sopt.now.compose.ui.login
 
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
@@ -28,13 +28,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.sopt.now.compose.R
 import com.sopt.now.compose.component.textfield.TextFieldWithTitle
-import com.sopt.now.data.model.MainViewModel
+import com.sopt.now.compose.navigation.Screen
+import com.sopt.now.compose.ui.main.MainViewModel
 import com.sopt.now.data.model.User
 
 @Composable
-fun Login(viewModel: MainViewModel) {
+fun Login(navHostController: NavHostController, viewModel: MainViewModel) {
     var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     Column(
@@ -72,7 +75,9 @@ fun Login(viewModel: MainViewModel) {
             Arrangement.Bottom
         ) {
             Button(
-                onClick = { viewModel.setScreen(0) },
+                onClick = {
+                    navHostController.navigate(Screen.Home.route)
+                },
                 modifier = Modifier
                     .fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
@@ -100,15 +105,15 @@ private fun loginButtonEvent(
     id: String,
     password: String
 ) {
-    if (validateLogin(
-            viewModel.id.value,
-            viewModel.password.value,
-            User(id, password, "", "")
-        )
-    ) {
-        viewModel.setScreen(2)
-        toastMessage(context, message =R.string.login_Success)
-    }
+//    if (validateLogin(
+//            viewModel.id.value,
+//            viewModel.password.value,
+//            User(id, password, "", "")
+//        )
+//    ) {
+//        viewModel.setScreen(2)
+//        toastMessage(context, message =R.string.login_Success)
+//    }
 }
 
 private fun validateLogin(id: String, password: String, user: User): Boolean =
@@ -122,5 +127,6 @@ private fun validatePassword(password: String, user: User): Boolean =
 @Preview(showBackground = true)
 @Composable
 fun LoginPreview() {
-    Login(viewModel = MainViewModel())
+    val navCtrl = rememberNavController()
+    Login(navCtrl, viewModel = MainViewModel())
 }

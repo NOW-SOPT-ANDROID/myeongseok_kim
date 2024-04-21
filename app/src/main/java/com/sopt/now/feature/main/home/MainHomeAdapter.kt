@@ -1,4 +1,4 @@
-package com.sopt.now.ui.main.home
+package com.sopt.now.feature.main.home
 
 import android.content.Context
 import android.view.LayoutInflater

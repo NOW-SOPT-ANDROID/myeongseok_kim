@@ -1,4 +1,4 @@
-package com.sopt.now.ui.main
+package com.sopt.now.feature.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

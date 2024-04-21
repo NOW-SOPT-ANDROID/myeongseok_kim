@@ -1,12 +1,12 @@
-package com.sopt.now.ui.main.profile
+package com.sopt.now.feature.main.profile
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.sopt.now.R
 import com.sopt.now.databinding.FragmentMainProfileBinding
-import com.sopt.now.ui.main.MainViewModel
-import com.sopt.now.util.BindingFragment
+import com.sopt.now.feature.main.MainViewModel
+import com.sopt.now.core.base.BindingFragment
 
 class MainProfileFragment :
     BindingFragment<FragmentMainProfileBinding>(R.layout.fragment_main_profile) {

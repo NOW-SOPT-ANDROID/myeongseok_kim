@@ -1,12 +1,12 @@
-package com.sopt.now.ui.main.home
+package com.sopt.now.feature.main.home
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.sopt.now.R
 import com.sopt.now.databinding.FragmentMainHomeBinding
-import com.sopt.now.ui.main.MainViewModel
-import com.sopt.now.util.BindingFragment
+import com.sopt.now.feature.main.MainViewModel
+import com.sopt.now.core.base.BindingFragment
 
 class MainHomeFragment : BindingFragment<FragmentMainHomeBinding>(R.layout.fragment_main_home) {
     private val viewModel: MainViewModel by activityViewModels()

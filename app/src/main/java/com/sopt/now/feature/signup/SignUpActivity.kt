@@ -1,13 +1,13 @@
-package com.sopt.now.ui.signup
+package com.sopt.now.feature.signup
 
 import android.content.Intent
 import android.os.Bundle
 import com.sopt.now.R
 import com.sopt.now.data.User
 import com.sopt.now.databinding.ActivitySignUpBinding
-import com.sopt.now.ui.login.LoginActivity.Companion.TAG_USER
-import com.sopt.now.util.BindingActivity
-import com.sopt.now.util.toast
+import com.sopt.now.feature.login.LoginActivity.Companion.TAG_USER
+import com.sopt.now.core.base.BindingActivity
+import com.sopt.now.core.util.toast
 
 class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_sign_up) {
     override fun onCreate(savedInstanceState: Bundle?) {

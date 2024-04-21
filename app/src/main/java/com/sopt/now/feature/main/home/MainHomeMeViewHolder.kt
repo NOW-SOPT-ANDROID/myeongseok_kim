@@ -1,4 +1,4 @@
-package com.sopt.now.ui.main.home
+package com.sopt.now.feature.main.home
 
 import androidx.recyclerview.widget.RecyclerView
 import com.sopt.now.data.Profile

@@ -3,7 +3,7 @@ package com.sopt.now.feature.main
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sopt.now.data.Profile
-import com.sopt.now.data.User
+import com.sopt.now.feature.User
 
 class MainViewModel : ViewModel() {
     private val _userData = MutableLiveData<List<Profile>>()

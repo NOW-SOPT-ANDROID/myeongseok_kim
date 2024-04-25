@@ -1,10 +1,13 @@
 package com.sopt.now.feature.login
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sopt.now.core.util.UiState
 import com.sopt.now.domain.entity.UserEntity
 import com.sopt.now.domain.usecase.GetUserInfoUseCase
+import com.sopt.now.domain.usecase.SaveUserInfoUseCase
 import com.sopt.now.feature.ErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -18,7 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val getUserInfoUseCase: GetUserInfoUseCase
+    private val getUserInfoUseCase: GetUserInfoUseCase,
+    private val saveUserInfoUseCase: SaveUserInfoUseCase
 ) : ViewModel() {
     private val _savedUserInfo = MutableStateFlow(
         UserEntity(
@@ -33,9 +37,13 @@ class LoginViewModel @Inject constructor(
     private val _loginState = MutableSharedFlow<UiState<UserEntity>>()
     val loginState: SharedFlow<UiState<UserEntity>> get() = _loginState.asSharedFlow()
 
-    fun tryLogin(id: String, password: String) {
-        checkLoginValidate(id, password)
+    fun saveUserInput(user: UserEntity) {
+        _savedUserInfo.value = user
     }
+
+    fun tryLogin(id: String, password: String) =
+        checkLoginValidate(id, password)
+
 
     private fun checkLoginValidate(id: String, password: String) {
         viewModelScope.launch {

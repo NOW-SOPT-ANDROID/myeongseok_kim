@@ -2,13 +2,14 @@ package com.sopt.now.feature.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.sopt.now.R
-import com.sopt.now.data.User
+import com.sopt.now.feature.User
 import com.sopt.now.databinding.ActivityLoginBinding
 import com.sopt.now.feature.signup.SignUpActivity
 
@@ -24,7 +25,6 @@ import kotlinx.coroutines.flow.onEach
 @AndroidEntryPoint
 class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_login) {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-    private lateinit var user: User
     private val viewModel by viewModels<LoginViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +32,12 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
     }
 
     private fun initLayout() {
-        setResultNext()
+        initRegisterResultLauncher()
+        Log.d("testmain", "initLayout: initRegi done")
         initButton()
+        Log.d("testmain", "initLayout: initBtn done")
+//        initSignUpStateObserve()//error
+        Log.d("testmain", "initLayout: stateObserve done")
     }
 
     private fun initButton() {
@@ -59,6 +63,23 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
         )
     }
 
+
+
+    private fun initRegisterResultLauncher() {
+        resultLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == RESULT_OK) {
+                result.data?.getSafeParcelable<User>(TAG_USER)
+                    ?.let { data ->
+                        viewModel.saveUserInput(data.toUserEntity())
+                        binding.etLoginId.setText(data.id)
+                        binding.etLoginPassword.setText(data.password)
+                    }
+            }
+        }
+    }
+
     private fun initSignUpStateObserve() {
         viewModel.loginState.flowWithLifecycle(lifecycle).onEach { state ->
             when (state) {
@@ -73,22 +94,6 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
             }
         }.launchIn(lifecycleScope)
     }
-
-    private fun setResultNext() {
-        resultLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val data = result.data?.getSafeParcelable<User>(TAG_USER)
-                data?.let {
-                    user = it
-                    binding.etLoginId.setText(user.id)
-                    binding.etLoginPassword.setText(user.password)
-                }
-            }
-        }
-    }
-
     companion object {
         const val TAG_USER = "user"
     }

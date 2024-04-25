@@ -19,3 +19,10 @@
 ### 메인화면
 - [x]  UI
 - [x] 정보 불러와 표시
+
+
+UIstate -https://hyeonlog-developer.tistory.com/131
+intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+기능 - 다시 못돌아오게함 
+현재 task 에 있는 모든 액티비티를 종료하고 새로 시작하는 엑티비티를 task 를 할당함으로 써 다시 못돌아오게함
+앱 로그인 이후에 메인 화면으로 이동 하기 위해 사용함

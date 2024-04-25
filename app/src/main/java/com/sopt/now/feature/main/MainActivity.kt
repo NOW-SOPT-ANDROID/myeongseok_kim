@@ -10,7 +10,7 @@ import com.sopt.now.feature.main.profile.MainProfileFragment
 import com.sopt.now.feature.main.search.MainSearchFragment
 import com.sopt.now.core.base.BindingActivity
 import com.sopt.now.core.util.getSafeParcelable
-import com.sopt.now.data.User
+import com.sopt.now.feature.User
 import com.sopt.now.feature.login.LoginActivity.Companion.TAG_USER
 
 class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {

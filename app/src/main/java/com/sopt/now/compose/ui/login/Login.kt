@@ -109,9 +109,7 @@ private fun loginButtonEvent(
     password: String,
     navHostController: NavHostController
 ) {
-    if (validateLogin(
-            id = viewModel.myInfo.value.id,
-            password = viewModel.myInfo.value.password,
+    if (viewModel.validateLogin(
             user = User(id, password, "", "")
         )
     ) {
@@ -120,13 +118,6 @@ private fun loginButtonEvent(
     }
 }
 
-private fun validateLogin(id: String, password: String, user: User): Boolean =
-    validateID(id, user) && validatePassword(password, user)
-
-private fun validateID(id: String, user: User): Boolean = id.isNotBlank() && id == user.id
-
-private fun validatePassword(password: String, user: User): Boolean =
-    password.isNotBlank() && password == user.password
 
 @Preview(showBackground = true)
 @Composable

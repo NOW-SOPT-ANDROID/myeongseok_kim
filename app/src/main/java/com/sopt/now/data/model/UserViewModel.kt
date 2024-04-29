@@ -56,6 +56,19 @@ class UserViewModel() : ViewModel() {
             data.mbti
         )
     }
+
+    fun validateLogin(
+        id: String = myInfo.value.id,
+        password: String = myInfo.value.password,
+        user: User
+    ): Boolean =
+        validateID(id, user) && validatePassword(password, user)
+
+    private fun validateID(id: String, user: User): Boolean = id.isNotBlank() && id == user.id
+
+    private fun validatePassword(password: String, user: User): Boolean =
+        password.isNotBlank() && password == user.password
+
 //  추후 추가할 기능
 //    fun updateUserData(friends: List<Profile.FriendProfile>) {
 //        _userData.clear()

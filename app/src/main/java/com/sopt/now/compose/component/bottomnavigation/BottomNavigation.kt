@@ -16,8 +16,8 @@ import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
 
 @Composable
 fun BottomNavigation(
-    selectedItem: Int,
-    onClick: (Int) -> Unit,
+    selectedItem: Int = 0 ,
+    onClick: (Int) -> Unit = {},
     items: List<BottomNavigationItem>
 ) {
     NavigationBar {

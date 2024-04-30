@@ -23,7 +23,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
 
     private fun initLayout() {
         initMainFragment()
-        inputData()
+        getUserData()
         clickButtonNavigation()
     }
 
@@ -61,7 +61,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
             .commit()
     }
 
-    private fun inputData() {
+    private fun getUserData() {
         val user = intent.getSafeParcelable<User>(TAG_USER) ?: User("", "", "", "")
         viewModel.setMyProfile(user)
     }

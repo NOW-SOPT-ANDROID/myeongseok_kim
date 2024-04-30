@@ -27,7 +27,8 @@ class MainViewModel : ViewModel() {
     fun updateProfileWithMyProfile() {
         _userData.value =
             listOf(
-                Profile.info(_myProfile.value!!.nickname, _myProfile.value!!.mbti),
+
+                Profile.info(name = _myProfile.value?.nickname ?:"", mbti = _myProfile.value?.mbti ?:""),
                 Profile.info("주효은", "INFP"),
                 Profile.info("이유빈", "ENFP"),
                 Profile.info("김민우", "ISTP"),

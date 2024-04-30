@@ -21,12 +21,9 @@ class MainProfileFragment :
         with(binding) {
             tvMainIdContent.text = viewModel.myProfile.value?.id
             tvMainPasswordContent.text = viewModel.myProfile.value?.password
-            tvMainNickname.text = WELCOME_TEXT.format(viewModel.myProfile.value?.nickname)
+            tvMainNickname.text =
+                getString(R.string.main_welcome).format(viewModel.myProfile.value?.nickname)
             tvMainMbtiContent.text = viewModel.myProfile.value?.mbti
         }
-    }
-
-    companion object {
-        const val WELCOME_TEXT = "%s님 환영합니다."
     }
 }

@@ -8,28 +8,20 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.main.MainActivity">
+        tools:context=".ui.main.home.MainHomeFragment">
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fcv_main"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_main_home"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/bnv_home"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bnv_home"
-            android:layout_width="0dp"
-            android:layout_height="80dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/main_menu" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/item_home_feed"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

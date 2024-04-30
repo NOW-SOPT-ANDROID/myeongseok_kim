@@ -1,7 +1,6 @@
-package com.sopt.now.ui
+package com.sopt.now.ui.login
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
@@ -9,6 +8,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.sopt.now.R
 import com.sopt.now.data.User
 import com.sopt.now.databinding.ActivityLoginBinding
+import com.sopt.now.ui.main.MainActivity
+import com.sopt.now.ui.signup.SignUpActivity
 
 import com.sopt.now.util.BindingActivity
 import com.sopt.now.util.getSafeParcelable

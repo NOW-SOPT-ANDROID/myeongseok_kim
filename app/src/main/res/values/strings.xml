@@ -7,6 +7,12 @@
     <string name="all_password">비밀번호</string>
     <string name="all_password_hint">비밀번호를 입력해주세요.</string>
 
+    <!--main-->
+    <string name="main_home">홈</string>
+    <string name="main_search">검색</string>
+    <string name="main_profile">마이페이지</string>
+    <string name="main_welcome">"%s님 환영합니다."</string>
+
     <!--login-->
     <string name="login_welcome">Welcome to SOPT</string>
     <string name="login_button">로그인 하기</string>
@@ -18,6 +24,5 @@
     <string name="singUp_MBTI">MBTI</string>
     <string name="singUp_MBTI_hint">MBTI를 입력해주세요.</string>
     <string name="singUp_button">회원가입 하기</string>
-
 
 </resources>

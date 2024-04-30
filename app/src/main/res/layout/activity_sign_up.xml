@@ -11,7 +11,7 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.SignUpActivity">
+        tools:context=".ui.signup.SignUpActivity">
 
         <TextView
             android:id="@+id/tv_signup_title"
@@ -59,7 +59,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_signup_id_title" />
 
         <TextView
-            android:id="@+id/tv_signup_passward_title"
+            android:id="@+id/tv_signup_password_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
@@ -76,7 +76,7 @@
             android:inputType="textPassword"
             app:layout_constraintEnd_toStartOf="@id/gl_end_login"
             app:layout_constraintStart_toEndOf="@id/gl_start_login"
-            app:layout_constraintTop_toBottomOf="@id/tv_signup_passward_title" />
+            app:layout_constraintTop_toBottomOf="@id/tv_signup_password_title" />
 
         <TextView
             android:id="@+id/tv_signup_nickname"

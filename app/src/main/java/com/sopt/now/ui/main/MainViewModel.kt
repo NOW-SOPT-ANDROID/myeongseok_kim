@@ -15,8 +15,8 @@ class MainViewModel : ViewModel() {
     init {
         _userData.value =
             listOf(
-                Profile.frilendsProfile("배찬우", "INFP"),
-                Profile.frilendsProfile("배찬우", "INFP"),
+                Profile.info("배찬우", "INFP"),
+                Profile.info("배찬우", "INFP"),
             )
     }
 
@@ -27,12 +27,12 @@ class MainViewModel : ViewModel() {
     fun updateProfileWithMyProfile() {
         _userData.value =
             listOf(
-                Profile.myProfile(_myProfile.value!!.nickname, _myProfile.value!!.mbti),
-                Profile.frilendsProfile("주효은", "INFP"),
-                Profile.frilendsProfile("이유빈", "ENFP"),
-                Profile.frilendsProfile("김민우", "ISTP"),
-                Profile.frilendsProfile("곽의진", "CUTE"),//자기소개에서 발췌
-                Profile.frilendsProfile("유정현", "ESTJ"),
+                Profile.info(_myProfile.value!!.nickname, _myProfile.value!!.mbti),
+                Profile.info("주효은", "INFP"),
+                Profile.info("이유빈", "ENFP"),
+                Profile.info("김민우", "ISTP"),
+                Profile.info("곽의진", "CUTE"),//자기소개에서 발췌
+                Profile.info("유정현", "ESTJ"),
             )
     }
 }

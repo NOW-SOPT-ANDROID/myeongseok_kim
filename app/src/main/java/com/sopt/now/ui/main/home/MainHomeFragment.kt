@@ -26,7 +26,7 @@ class MainHomeFragment : BindingFragment<FragmentMainHomeBinding>(R.layout.fragm
 
     private fun setUserList() {
         viewModel.userData.observe(viewLifecycleOwner) {
-            mainHomeAdapter.setUserList(it)
+            mainHomeAdapter.submitList(it)
         }
     }
 

@@ -33,7 +33,7 @@ class LoginViewModel : ViewModel() {
                         val errorMessage = errorJson.getString("message")
                         liveData.value = UiState.Error(errorMessage)
                     } catch (e: Exception) {
-                        liveData.value = UiState.Error("정보 불러오기 에러 메시지 파싱 실패")
+                        liveData.value = UiState.Error("로그인 실패  에러 메시지 파싱 실패")
                     }
                 }
             }

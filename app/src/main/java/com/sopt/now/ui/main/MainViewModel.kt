@@ -27,7 +27,7 @@ class MainViewModel : ViewModel() {
     fun updateProfileWithMyProfile() {
         _userData.value =
             listOf(
-                Profile.myProfile(_myProfile.value!!.nickname, _myProfile.value!!.mbti),
+                Profile.myProfile(_myProfile.value!!.nickname, _myProfile.value!!.phonenumber),
                 Profile.frilendsProfile("주효은", "INFP"),
                 Profile.frilendsProfile("이유빈", "ENFP"),
                 Profile.frilendsProfile("김민우", "ISTP"),

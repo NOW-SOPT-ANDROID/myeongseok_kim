@@ -22,7 +22,7 @@ class MainProfileFragment :
             tvMainIdContent.text = viewModel.myProfile.value?.id
             tvMainPasswordContent.text = viewModel.myProfile.value?.password
             tvMainNickname.text = WELCOME_TEXT.format(viewModel.myProfile.value?.nickname)
-            tvMainMbtiContent.text = viewModel.myProfile.value?.mbti
+            tvMainMbtiContent.text = viewModel.myProfile.value?.phonenumber
         }
     }
 

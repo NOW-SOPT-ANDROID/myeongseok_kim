@@ -98,23 +98,23 @@
             app:layout_constraintTop_toBottomOf="@id/tv_signup_nickname" />
 
         <TextView
-            android:id="@+id/tv_signup_MBTI"
+            android:id="@+id/tv_signup_numbers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="@string/singUp_MBTI"
+            android:text="@string/all_number"
             android:textSize="20sp"
             app:layout_constraintStart_toEndOf="@id/gl_start_login"
             app:layout_constraintTop_toBottomOf="@id/et_signup_nickname" />
 
         <EditText
-            android:id="@+id/et_signup_MBTI"
+            android:id="@+id/et_signup_numbers"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/singUp_MBTI_hint"
+            android:hint="@string/singUp_number_hint"
             app:layout_constraintEnd_toStartOf="@id/gl_end_login"
             app:layout_constraintStart_toEndOf="@id/gl_start_login"
-            app:layout_constraintTop_toBottomOf="@id/tv_signup_MBTI" />
+            app:layout_constraintTop_toBottomOf="@id/tv_signup_numbers" />
 
 
         <Button

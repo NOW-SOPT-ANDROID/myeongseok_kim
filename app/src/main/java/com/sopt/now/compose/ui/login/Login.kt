@@ -1,7 +1,6 @@
-package com.sopt.now.compose.ui
+package com.sopt.now.compose.ui.login
 
 import android.content.Context
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,83 +28,56 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.sopt.now.compose.R
 import com.sopt.now.compose.component.textfield.TextFieldWithTitle
-import com.sopt.now.data.model.MainViewModel
+import com.sopt.now.compose.component.toastMessage
+import com.sopt.now.compose.navigation.Screen
+import com.sopt.now.data.model.UserViewModel
 import com.sopt.now.data.model.User
 
 @Composable
-fun SignUp(viewModel: MainViewModel) {
+fun Login(navHostController: NavHostController, viewModel: UserViewModel) {
     var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var nickname by remember { mutableStateOf("") }
-    var mbti by remember { mutableStateOf("") }
-
     Column(
         modifier = Modifier
             .padding(10.dp)
-            .fillMaxSize()
-            .background(color = Color.White),
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         Text(
-            text = "SIGN UP",
+            text = stringResource(id = R.string.login_welcome),
             textAlign = TextAlign.Center,
-            fontSize = 30.sp,
+            fontSize = 25.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .fillMaxWidth()
         )
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(30.dp))
         TextFieldWithTitle(
             title = stringResource(id = R.string.all_id),
             value = id,
             onValueChanged = { id = it },
-            description = stringResource(
-                id = R.string.all_id_hint
-            )
+            description = stringResource(id = R.string.all_id_hint)
         )
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(30.dp))
         TextFieldWithTitle(
             title = stringResource(id = R.string.all_password),
             value = password,
             onValueChanged = { password = it },
-            description = stringResource(
-                id = R.string.all_password_hint
-            ),
+            description = stringResource(id = R.string.all_password_hint),
             keyboardType = KeyboardType.Password
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        TextFieldWithTitle(
-            title = stringResource(id = R.string.all_nick_name),
-            value = nickname,
-            onValueChanged = { nickname = it },
-            description = stringResource(
-                id = R.string.singUp_nick_name_hint
-            )
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        TextFieldWithTitle(
-            title = stringResource(id = R.string.all_mbti),
-            value = mbti,
-            onValueChanged = { mbti = it },
-            description = stringResource(
-                id = R.string.singUp_MBTI_hint
-            )
         )
         Column(
             modifier = Modifier.fillMaxSize(),
             Arrangement.Bottom
         ) {
-            val context = LocalContext.current
             Button(
                 onClick = {
-                    signUpButtonEvent(
-                        context = context,
-                        viewModel = viewModel,
-                        user = User(id, password, nickname, mbti)
-                    )
+                    navHostController.navigate(Screen.SignUp.route)
                 },
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -114,40 +86,42 @@ fun SignUp(viewModel: MainViewModel) {
             ) {
                 Text(text = stringResource(id = R.string.all_enroll))
             }
+            val context = LocalContext.current
+            Button(
+                onClick = {
+                    loginButtonEvent(context, viewModel, id, password, navHostController)
+                },
+                modifier = Modifier
+                    .fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text(text = stringResource(id = R.string.all_input))
+            }
         }
     }
 }
 
-private fun signUpButtonEvent(context: Context, viewModel: MainViewModel, user: User) {
-    if (validateUserInfo(user)) {
-        with(viewModel) {
-            setId(user.id)
-            setPassword(user.password)
-            setNickname(user.nickname)
-            setMbti(user.mbti)
-            setScreen(1)
-        }
-        toastMessage(context, message =  R.string.singUp_Success)
-    } else {
-        toastMessage(context, message =  R.string.singUp_failure)
+private fun loginButtonEvent(
+    context: Context,
+    viewModel: UserViewModel,
+    id: String,
+    password: String,
+    navHostController: NavHostController
+) {
+    if (viewModel.validateLogin(
+            user = User(id, password, "", "")
+        )
+    ) {
+        navHostController.navigate(Screen.Home.route)
+        context.toastMessage(message = R.string.login_Success)
     }
 }
 
-private fun validateUserInfo(user: User): Boolean =
-    validateID(user.id) && validatePassword(user.password) && validateNickName(user.nickname) && validateMBTI(
-        user.mbti
-    )
-
-private fun validateID(text: String): Boolean = text.length in 6..10
-
-private fun validatePassword(text: String): Boolean = text.length in 8..12
-
-private fun validateNickName(text: String): Boolean = text.isNotBlank()
-
-private fun validateMBTI(text: String): Boolean = text.length == 4
 
 @Preview(showBackground = true)
 @Composable
-fun SignUPPreview() {
-    SignUp(viewModel = MainViewModel())
+fun LoginPreview() {
+    val navCtrl = rememberNavController()
+    Login(navCtrl, viewModel = UserViewModel())
 }

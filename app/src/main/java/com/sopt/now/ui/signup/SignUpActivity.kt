@@ -33,7 +33,7 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
 
                 }
                 is UiState.Success -> {
-                    toast("회원가입성공!")
+                    toast("회원가입 성공 userid = ${state.data.userid} 입니다!")
                     navToLogin(state.data)
                 }
                 is UiState.Error -> {

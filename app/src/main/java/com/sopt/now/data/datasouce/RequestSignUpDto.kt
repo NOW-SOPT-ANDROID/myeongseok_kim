@@ -15,6 +15,6 @@ data class RequestSignUpDto(
     @SerialName("phone")
     val phone: String,
 ) {
-    fun toUser(): User =
-        User(id = authenticationId, password = password, nickname = nickname, phonenumber = phone)
+    fun toUserWithUserId(userid: String): User =
+        User(id = authenticationId, password = password, nickname = nickname, phonenumber = phone, userid = userid)
 }

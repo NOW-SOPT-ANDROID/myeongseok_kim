@@ -46,14 +46,14 @@
         tools:text="@string/app_name" />
 
     <TextView
-        android:id="@+id/tv_home_feed_me_mbti"
+        android:id="@+id/tv_home_feed_me_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="@id/tv_home_feed_me_name"
         app:layout_constraintEnd_toStartOf="@id/gl_item_home_feed_me_end"
         app:layout_constraintTop_toTopOf="@id/tv_home_feed_me_name"
-        tools:text="@string/singUp_MBTI" />
+        tools:text="@string/all_number" />
 
     <View
         android:layout_width="0dp"

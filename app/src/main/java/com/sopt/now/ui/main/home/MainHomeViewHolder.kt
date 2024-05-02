@@ -9,7 +9,7 @@ class MainHomeViewHolder(private val binding: ItemHomeFeedBinding) :
     fun onBind(userData: Profile.frilendsProfile) {
         binding.run {
             tvHomeFeedName.text = userData.name
-            tvHomeFeedMbti.text = userData.mbti
+            tvHomeFeedNumber.text = userData.mbti
         }
     }
 }

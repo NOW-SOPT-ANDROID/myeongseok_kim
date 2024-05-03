@@ -12,6 +12,7 @@
     <string name="main_home">홈</string>
     <string name="main_search">검색</string>
     <string name="main_profile">마이페이지</string>
+    <string name="main_welcome">"%s님 환영합니다."</string>
 
     <!--login-->
     <string name="login_welcome">Welcome to SOPT</string>
@@ -26,6 +27,5 @@
 
     <string name="singUp_number_hint">전화번호를 입력해주세요.</string>
     <string name="singUp_button">회원가입 하기</string>
-
 
 </resources>

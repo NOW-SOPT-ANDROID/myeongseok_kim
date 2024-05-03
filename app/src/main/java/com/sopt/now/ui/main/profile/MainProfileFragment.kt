@@ -25,8 +25,4 @@ class MainProfileFragment :
             tvMainNumberContent.text = viewModel.myProfile.value?.phonenumber
         }
     }
-
-    companion object {
-        const val WELCOME_TEXT = "%s님 환영합니다."
-    }
 }

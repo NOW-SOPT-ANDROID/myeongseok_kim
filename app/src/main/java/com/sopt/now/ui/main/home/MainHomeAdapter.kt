@@ -3,15 +3,16 @@ package com.sopt.now.ui.main.home
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sopt.now.data.Profile
 import com.sopt.now.databinding.ItemHomeFeedBinding
 import com.sopt.now.databinding.ItemHomeFeedMeBinding
 
 class MainHomeAdapter(context: Context) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    ListAdapter<Profile, RecyclerView.ViewHolder>(ProfileDiffCallback()) {
     private val inflater by lazy { LayoutInflater.from(context) }
-    private val userList = mutableListOf<Profile>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -45,14 +46,18 @@ class MainHomeAdapter(context: Context) :
         }
     }
 
-    fun setUserList(dataList: List<Profile>) {
-        userList.clear()
-        userList.addAll(dataList)
-        notifyDataSetChanged()
-    }
-
     companion object {
         const val ME = 0
         const val FRIENDS = 1
+    }
+}
+
+class ProfileDiffCallback : DiffUtil.ItemCallback<Profile>() {
+    override fun areItemsTheSame(oldItem: Profile, newItem: Profile): Boolean {
+        return oldItem == newItem
+    }
+
+    override fun areContentsTheSame(oldItem: Profile, newItem: Profile): Boolean {
+        return oldItem == newItem
     }
 }

@@ -3,7 +3,6 @@ package com.sopt.now.ui.login
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.sopt.now.R
 import com.sopt.now.data.User
@@ -13,13 +12,11 @@ import com.sopt.now.ui.main.MainActivity
 import com.sopt.now.ui.signup.SignUpActivity
 import com.sopt.now.util.BindingActivity
 import com.sopt.now.util.UiState
-import com.sopt.now.util.getSafeParcelable
 import com.sopt.now.util.toast
 
 class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_login) {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private val viewModel by viewModels<LoginViewModel>()
-    private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,24 +24,8 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
     }
 
     private fun initView() {
-        setResultNext()
         initButton()
         initObserver()
-    }
-
-    private fun setResultNext() {
-        resultLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val data = result.data?.getSafeParcelable<User>(TAG_USER)
-                data?.let {
-                    user = it
-                    binding.etLoginId.setText(user.id)
-                    binding.etLoginPassword.setText(user.password)
-                }
-            }
-        }
     }
 
     private fun initButton() {

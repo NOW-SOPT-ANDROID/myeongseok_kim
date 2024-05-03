@@ -23,7 +23,5 @@ data class UserData(
     @SerialName("phone")
     val phone: String,
 ) {
-    fun toUser() {
-        User(id = authenticationId, password = "", nickname = nickname, phonenumber = phone)
-    }
+    fun toUser() = User(id = authenticationId, password = "", nickname = nickname, phonenumber = phone)
 }

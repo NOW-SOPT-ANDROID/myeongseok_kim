@@ -1,5 +1,6 @@
 package com.sopt.now.ui.login
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sopt.now.data.ServicePool
@@ -25,7 +26,16 @@ class LoginViewModel : ViewModel() {
                 response: Response<ResponseLoginDto>,
             ) {
                 if (response.isSuccessful) {
-                    liveData.value = UiState.Success(User(request.authenticationId,request.password,"",""))
+                    Log.d("test_loginservice", "onResponse: ${response.body()}")
+                    liveData.value = UiState.Success(
+                        User(
+                            request.authenticationId,
+                            request.password,
+                            "",
+                            "",
+                            userid = response.headers()["location"].toString()
+                        )
+                    )
                 } else {
                     val error = response.errorBody()?.string()
                     try {

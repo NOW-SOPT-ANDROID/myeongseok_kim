@@ -16,11 +16,11 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class UserViewModel() : ViewModel() {
-    private val _userData = mutableStateListOf<Profile.FriendProfile>()
+    private val _userData = mutableStateListOf<Profile>()
     val userData = _userData
 
     private val _myProfile = mutableStateOf(
-        Profile.MyProfile(
+        Profile(
             R.drawable.img_profile,
             "에러!",
             "에러!"
@@ -37,26 +37,26 @@ class UserViewModel() : ViewModel() {
     init {
         _userData.addAll(
             listOf(
-                Profile.FriendProfile(R.drawable.img_profile, "주효은", "INFP"),
-                Profile.FriendProfile(R.drawable.img_profile, "배찬우", "INFP"),
-                Profile.FriendProfile(R.drawable.img_profile, "이유빈", "ENFP"),
-                Profile.FriendProfile(R.drawable.img_profile, "김민우", "ISTP"),
-                Profile.FriendProfile(R.drawable.img_profile, "곽의진", "CUTE"),//자기소개에서 발췌
-                Profile.FriendProfile(R.drawable.img_profile, "주효은", "INFP"),
-                Profile.FriendProfile(R.drawable.img_profile, "배찬우", "INFP"),
-                Profile.FriendProfile(R.drawable.img_profile, "이유빈", "ENFP"),
-                Profile.FriendProfile(R.drawable.img_profile, "김민우", "ISTP"),
-                Profile.FriendProfile(R.drawable.img_profile, "곽의진", "CUTE"),//자기소개에서 발췌
-                Profile.FriendProfile(R.drawable.img_profile, "주효은", "INFP"),
-                Profile.FriendProfile(R.drawable.img_profile, "배찬우", "INFP"),
-                Profile.FriendProfile(R.drawable.img_profile, "이유빈", "ENFP"),
-                Profile.FriendProfile(R.drawable.img_profile, "김민우", "ISTP"),
-                Profile.FriendProfile(R.drawable.img_profile, "곽의진", "CUTE"),//자기소개에서 발췌
-                Profile.FriendProfile(R.drawable.img_profile, "주효은", "INFP"),
-                Profile.FriendProfile(R.drawable.img_profile, "배찬우", "INFP"),
-                Profile.FriendProfile(R.drawable.img_profile, "이유빈", "ENFP"),
-                Profile.FriendProfile(R.drawable.img_profile, "김민우", "ISTP"),
-                Profile.FriendProfile(R.drawable.img_profile, "곽의진", "CUTE"),//자기소개에서 발췌
+                Profile(R.drawable.img_profile, "배찬우", "INFP"),
+                Profile(R.drawable.img_profile, "이유빈", "ENFP"),
+                Profile(R.drawable.img_profile, "김민우", "ISTP"),
+                Profile(R.drawable.img_profile, "주효은", "INFP"),
+                Profile(R.drawable.img_profile, "곽의진", "CUTE"),//자기소개에서 발췌
+                Profile(R.drawable.img_profile, "주효은", "INFP"),
+                Profile(R.drawable.img_profile, "배찬우", "INFP"),
+                Profile(R.drawable.img_profile, "이유빈", "ENFP"),
+                Profile(R.drawable.img_profile, "김민우", "ISTP"),
+                Profile(R.drawable.img_profile, "곽의진", "CUTE"),//자기소개에서 발췌
+                Profile(R.drawable.img_profile, "주효은", "INFP"),
+                Profile(R.drawable.img_profile, "배찬우", "INFP"),
+                Profile(R.drawable.img_profile, "이유빈", "ENFP"),
+                Profile(R.drawable.img_profile, "김민우", "ISTP"),
+                Profile(R.drawable.img_profile, "곽의진", "CUTE"),//자기소개에서 발췌
+                Profile(R.drawable.img_profile, "주효은", "INFP"),
+                Profile(R.drawable.img_profile, "배찬우", "INFP"),
+                Profile(R.drawable.img_profile, "이유빈", "ENFP"),
+                Profile(R.drawable.img_profile, "김민우", "ISTP"),
+                Profile(R.drawable.img_profile, "곽의진", "CUTE"),//자기소개에서 발췌
             )
         )
     }

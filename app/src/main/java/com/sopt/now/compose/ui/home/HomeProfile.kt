@@ -23,7 +23,7 @@ import com.sopt.now.compose.R
 import com.sopt.now.data.model.Profile
 
 @Composable
-fun HomeMyProfile(data: Profile.MyProfile) {
+fun HomeMyProfile(data: Profile) {
     Column (modifier = Modifier.background(Color.Gray)){
         Row(
             modifier = Modifier
@@ -45,7 +45,7 @@ fun HomeMyProfile(data: Profile.MyProfile) {
             Spacer(modifier = Modifier.width(10.dp))
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = data.mbti,
+                text = data.number,
                 fontSize = 25.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -54,7 +54,7 @@ fun HomeMyProfile(data: Profile.MyProfile) {
 }
 
 @Composable
-fun HomeFriendsProfile(data: Profile.FriendProfile) {
+fun HomeFriendsProfile(data: Profile) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -75,7 +75,7 @@ fun HomeFriendsProfile(data: Profile.FriendProfile) {
         Spacer(modifier = Modifier.width(50.dp))
         Spacer(modifier = Modifier.weight(1f))
         Text(
-            text = data.mbti,
+            text = data.number,
             fontSize = 14.sp,
         )
     }
@@ -84,11 +84,11 @@ fun HomeFriendsProfile(data: Profile.FriendProfile) {
 @Preview
 @Composable
 fun PreviewMyProfile() {
-    HomeMyProfile(data = Profile.MyProfile(R.drawable.img_profile, "명석", "enfp"))
+    HomeMyProfile(data = Profile(R.drawable.img_profile, "명석", "enfp"))
 }
 
 @Preview
 @Composable
 fun PreviewFriendsProfile() {
-    HomeFriendsProfile(data = Profile.FriendProfile(R.drawable.img_profile, "의진", "CUTE"))
+    HomeFriendsProfile(data = Profile(R.drawable.img_profile, "의진", "CUTE"))
 }

@@ -1,13 +1,12 @@
 package com.sopt.now.ui.main
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sopt.now.data.Profile
 import com.sopt.now.data.ServicePool.infoService
 import com.sopt.now.data.User
-import com.sopt.now.data.datasouce.RequestLoginDto
 import com.sopt.now.data.datasouce.ResponseInfoDto
-import com.sopt.now.data.datasouce.ResponseLoginDto
 import com.sopt.now.util.UiState
 import org.json.JSONObject
 import retrofit2.Call
@@ -23,16 +22,27 @@ class MainViewModel : ViewModel() {
     private val _myProfile = MutableLiveData<User>()
     val myProfile = _myProfile
 
+    init {
+        _userData.value =
+            listOf(
+                Profile("배찬우", "INFP"),
+                Profile("배찬우", "INFP"),
+            )
+    }
 
-    fun getInfo(userid:String) {
+    fun getInfo(userid: String) {
+        myInfo.value = UiState.Loading
+
         infoService.getUserInfo(userid).enqueue(object : Callback<ResponseInfoDto> {
             override fun onResponse(
                 call: Call<ResponseInfoDto>,
                 response: Response<ResponseInfoDto>,
             ) {
                 if (response.isSuccessful) {
+                    Log.d("test_mainviewmodel", "onResponse: ${response.body()}")
                     val user = response.body()?.data
-//                    myInfo.value = UiState.Success(response.body().data.toUser())
+
+                    myInfo.value = UiState.Success(user?.toUser() ?: User("", "", "", ""))
                 } else {
                     val error = response.errorBody()?.string()
                     try {
@@ -51,14 +61,6 @@ class MainViewModel : ViewModel() {
         })
     }
 
-    init {
-        _userData.value =
-            listOf(
-                Profile.frilendsProfile("배찬우", "INFP"),
-                Profile.frilendsProfile("배찬우", "INFP"),
-            )
-    }
-
     fun setMyProfile(data: User) {
         _myProfile.value = data
     }
@@ -66,12 +68,12 @@ class MainViewModel : ViewModel() {
     fun updateProfileWithMyProfile() {
         _userData.value =
             listOf(
-                Profile.myProfile(_myProfile.value!!.nickname, _myProfile.value!!.phonenumber),
-                Profile.frilendsProfile("주효은", "INFP"),
-                Profile.frilendsProfile("이유빈", "ENFP"),
-                Profile.frilendsProfile("김민우", "ISTP"),
-                Profile.frilendsProfile("곽의진", "CUTE"),//자기소개에서 발췌
-                Profile.frilendsProfile("유정현", "ESTJ"),
+                Profile(_myProfile.value!!.nickname, _myProfile.value!!.phonenumber),
+                Profile("주효은", "INFP"),
+                Profile("이유빈", "ENFP"),
+                Profile("김민우", "ISTP"),
+                Profile("곽의진", "CUTE"),//자기소개에서 발췌
+                Profile("유정현", "ESTJ"),
             )
     }
 }

@@ -33,15 +33,15 @@ class MainHomeAdapter(context: Context) :
 
     override fun getItemCount(): Int = userList.size
 
-    override fun getItemViewType(position: Int): Int = when (userList[position]) {
-        is Profile.myProfile -> ME
-        is Profile.frilendsProfile -> FRIENDS
+    override fun getItemViewType(position: Int): Int {
+        if (position == 0) return ME
+        return FRIENDS
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is MainHomeMeViewHolder -> holder.onBind(userList[position] as Profile.myProfile)
-            is MainHomeViewHolder -> holder.onBind(userList[position] as Profile.frilendsProfile)
+            is MainHomeMeViewHolder -> holder.onBind(userList[position] )
+            is MainHomeViewHolder -> holder.onBind(userList[position])
         }
     }
 

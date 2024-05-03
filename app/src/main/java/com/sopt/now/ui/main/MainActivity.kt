@@ -11,7 +11,9 @@ import com.sopt.now.ui.main.home.MainHomeFragment
 import com.sopt.now.ui.main.profile.MainProfileFragment
 import com.sopt.now.ui.main.search.MainSearchFragment
 import com.sopt.now.util.BindingActivity
+import com.sopt.now.util.UiState
 import com.sopt.now.util.getSafeParcelable
+import com.sopt.now.util.toast
 
 class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val viewModel by viewModels<MainViewModel>()
@@ -23,8 +25,28 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
 
     private fun initLayout() {
         initMainFragment()
-        inputData()
+        initObserver()
+        getUserData()
         clickButtonNavigation()
+    }
+
+    private fun initObserver() {
+        viewModel.myInfo.observe(this) { state ->
+            when (state) {
+                is UiState.Loading -> {
+
+                }
+
+                is UiState.Success -> {
+                    viewModel.setMyProfile(state.data)
+                    viewModel.updateProfileWithMyProfile()
+                }
+
+                is UiState.Error -> {
+                    toast(state.errorMessage)
+                }
+            }
+        }
     }
 
     private fun initMainFragment() {
@@ -61,8 +83,8 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
             .commit()
     }
 
-    private fun inputData() {
+    private fun getUserData() {
         val user = intent.getSafeParcelable<User>(TAG_USER) ?: User("", "", "", "")
-        viewModel.setMyProfile(user)
+        viewModel.getInfo(user.userid)
     }
 }

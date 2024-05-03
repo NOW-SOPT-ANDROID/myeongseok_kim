@@ -27,7 +27,6 @@ class MainHomeFragment : BindingFragment<FragmentMainHomeBinding>(R.layout.fragm
         viewModel.userData.observe(viewLifecycleOwner) {
             mainHomeAdapter.setUserList(it)
         }
-        viewModel.updateProfileWithMyProfile()
     }
 
 }

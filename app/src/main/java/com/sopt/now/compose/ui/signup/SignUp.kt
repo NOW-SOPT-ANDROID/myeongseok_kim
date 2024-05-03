@@ -1,6 +1,5 @@
 package com.sopt.now.compose.ui.signup
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,7 +13,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -32,10 +33,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.sopt.now.compose.R
+import com.sopt.now.compose.component.UiState
 import com.sopt.now.compose.component.textfield.TextFieldWithTitle
 import com.sopt.now.data.model.UserViewModel
-import com.sopt.now.data.model.User
 import com.sopt.now.compose.component.toastMessage
+import com.sopt.now.compose.data.datasource.request.RequestSignUpDto
 import com.sopt.now.compose.navigation.Screen
 
 
@@ -44,7 +46,29 @@ fun SignUp(navHostController: NavHostController, viewModel: UserViewModel) {
     var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var nickname by remember { mutableStateOf("") }
-    var mbti by remember { mutableStateOf("") }
+    var number by remember { mutableStateOf("") }
+    val context = LocalContext.current
+    val authState by viewModel.liveData.observeAsState()
+
+    LaunchedEffect(authState) {
+        authState?.let { state ->
+            when (state) {
+                is UiState.Loading -> {
+                }
+                is UiState.Success -> {
+                    viewModel.setMyProfile(state.data)
+                    context.toastMessage(
+                        context.getString(R.string.singUp_Success)
+                            .format(state.data.userid)
+                    )
+                    navHostController.navigate(Screen.Login.route)
+                }
+                is UiState.Error -> {
+                    context.toastMessage(state.errorMessage)
+                }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -92,26 +116,20 @@ fun SignUp(navHostController: NavHostController, viewModel: UserViewModel) {
         )
         Spacer(modifier = Modifier.height(20.dp))
         TextFieldWithTitle(
-            title = stringResource(id = R.string.all_mbti),
-            value = mbti,
-            onValueChanged = { mbti = it },
+            title = stringResource(id = R.string.all_number),
+            value = number,
+            onValueChanged = { number = it },
             description = stringResource(
-                id = R.string.singUp_MBTI_hint
+                id = R.string.singUp_number_hint
             )
         )
         Column(
             modifier = Modifier.fillMaxSize(),
             Arrangement.Bottom
         ) {
-            val context = LocalContext.current
             Button(
                 onClick = {
-                    signUpButtonEvent(
-                        context = context,
-                        viewModel = viewModel,
-                        user = User(id, password, nickname, mbti),
-                        navHostController = navHostController
-                    )
+                    viewModel.signUp(RequestSignUpDto(authenticationId = id, password = password, nickname = nickname, phone =  number))
                 },
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -124,35 +142,6 @@ fun SignUp(navHostController: NavHostController, viewModel: UserViewModel) {
     }
 }
 
-private fun signUpButtonEvent(
-    context: Context,
-    viewModel: UserViewModel,
-    user: User,
-    navHostController: NavHostController
-) {
-    if (validateUserInfo(user)) {
-        with(viewModel) {
-            setMyProfile(user)
-        }
-        navHostController.navigate(Screen.Login.route)
-        context.toastMessage(R.string.singUp_Success)
-    } else {
-        context.toastMessage(R.string.singUp_failure)
-    }
-}
-
-private fun validateUserInfo(user: User): Boolean =
-    validateID(user.id) && validatePassword(user.password) && validateNickName(user.nickname) && validateMBTI(
-        user.phonenumber
-    )
-
-private fun validateID(text: String): Boolean = text.length in 6..10
-
-private fun validatePassword(text: String): Boolean = text.length in 8..12
-
-private fun validateNickName(text: String): Boolean = text.isNotBlank()
-
-private fun validateMBTI(text: String): Boolean = text.length == 4
 
 @Preview(showBackground = true)
 @Composable

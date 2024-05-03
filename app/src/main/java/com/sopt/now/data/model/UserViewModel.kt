@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel
 import com.sopt.now.compose.R
 import com.sopt.now.compose.component.UiState
 import com.sopt.now.compose.data.ServicePool
+import com.sopt.now.compose.data.datasource.request.RequestLoginDto
 import com.sopt.now.compose.data.datasource.request.RequestSignUpDto
+import com.sopt.now.compose.data.datasource.response.ResponseLoginDto
 import com.sopt.now.compose.data.datasource.response.ResponseSignUpDto
 import org.json.JSONObject
 import retrofit2.Call
@@ -86,6 +88,41 @@ class UserViewModel() : ViewModel() {
         })
     }
 
+    fun login(request: RequestLoginDto) {
+        liveData.value = UiState.Loading
+
+        authService.login(request).enqueue(object : Callback<ResponseLoginDto> {
+            override fun onResponse(
+                call: Call<ResponseLoginDto>,
+                response: Response<ResponseLoginDto>,
+            ) {
+                if (response.isSuccessful) {
+                    liveData.value = UiState.Success(
+                        User(
+                            request.authenticationId,
+                            request.password,
+                            "",
+                            "",
+                            userid = response.headers()["location"].toString()
+                        )
+                    )
+                } else {
+                    val error = response.errorBody()?.string()
+                    try {
+                        val errorJson = JSONObject(error)
+                        val errorMessage = errorJson.getString("message")
+                        liveData.value = UiState.Error(errorMessage)
+                    } catch (e: Exception) {
+                        liveData.value = UiState.Error("로그인 실패  에러 메시지 파싱 실패")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseLoginDto>, t: Throwable) {
+                liveData.value = UiState.Error("서버 에러")
+            }
+        })
+    }
 
     fun setMyProfile(data: User) {
         _myInfo.value = data

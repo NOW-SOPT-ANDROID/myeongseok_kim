@@ -6,6 +6,7 @@ plugins {
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
     namespace 'com.sopt.now.compose'
     compileSdk 34
@@ -19,11 +20,11 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField "String", "AUTH_BASE_URL", properties["base.url"]
-
         vectorDrawables {
             useSupportLibrary true
         }
+
+        buildConfigField "String", "AUTH_BASE_URL", properties["base.url"]
     }
 
     buildTypes {
@@ -41,6 +42,7 @@ android {
     }
     buildFeatures {
         compose true
+        buildConfig true
     }
     composeOptions {
         kotlinCompilerExtensionVersion '1.5.1'
@@ -49,9 +51,6 @@ android {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
-    }
-    buildFeatures {
-        buildConfig true
     }
 }
 
@@ -75,6 +74,8 @@ dependencies {
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
+    //livedata
+    implementation 'androidx.compose.runtime:runtime-livedata:1.6.7'
 
     //json
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1'

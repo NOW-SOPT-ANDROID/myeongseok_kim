@@ -56,7 +56,6 @@ fun SignUp(navHostController: NavHostController, viewModel: UserViewModel) {
                 is UiState.Loading -> {
                 }
                 is UiState.Success -> {
-                    viewModel.setMyProfile(state.data)
                     context.toastMessage(
                         context.getString(R.string.singUp_Success)
                             .format(state.data.userid)

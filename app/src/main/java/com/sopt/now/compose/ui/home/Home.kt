@@ -46,7 +46,7 @@ import com.sopt.now.data.model.UserViewModel
 @Composable
 fun Home(navHostController: NavHostController, viewModel: UserViewModel) {
     var selectedItem by remember { mutableIntStateOf(0) }
-    val authState by viewModel.liveData.observeAsState()
+    val authState by viewModel.mainUserData.observeAsState()
     val context = LocalContext.current
 
     LaunchedEffect(authState) {
@@ -64,8 +64,9 @@ fun Home(navHostController: NavHostController, viewModel: UserViewModel) {
                 }
             }
         }
+        viewModel.getInfo(viewModel.loginData.value?._data?.userid ?: "")
     }
-    viewModel.getInfo(viewModel.myInfo.value.userid)
+
 
     val items = listOf(
         BottomNavigationItem(

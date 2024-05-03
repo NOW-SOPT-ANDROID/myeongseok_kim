@@ -43,8 +43,9 @@ import com.sopt.now.data.model.UserViewModel
 fun Login(navHostController: NavHostController, viewModel: UserViewModel) {
     var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    val authState by viewModel.liveData.observeAsState()
+    val authState by viewModel.loginData.observeAsState()
     val context = LocalContext.current
+
     LaunchedEffect(authState) {
         authState?.let { state ->
             when (state) {
@@ -52,7 +53,6 @@ fun Login(navHostController: NavHostController, viewModel: UserViewModel) {
                 }
 
                 is UiState.Success -> {
-                    viewModel.setMyProfile(state.data)
                     context.toastMessage(context.getString(R.string.login_Success))
                     navHostController.navigate(Screen.Home.route)
                 }

@@ -1,5 +1,6 @@
 package com.sopt.now.data.model
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
@@ -34,7 +35,10 @@ class UserViewModel() : ViewModel() {
     val myInfo = _myInfo
 
     private val authService by lazy { ServicePool.authService }
+
     val liveData = MutableLiveData<UiState<User>>()
+    val loginData = MutableLiveData<UiState<User>>()
+    val mainUserData = MutableLiveData<UiState<User>>()
 
     init {
         _userData.addAll(
@@ -91,7 +95,7 @@ class UserViewModel() : ViewModel() {
     }
 
     fun login(request: RequestLoginDto) {
-        liveData.value = UiState.Loading
+        loginData.value = UiState.Loading
 
         authService.login(request).enqueue(object : Callback<ResponseLoginDto> {
             override fun onResponse(
@@ -99,7 +103,7 @@ class UserViewModel() : ViewModel() {
                 response: Response<ResponseLoginDto>,
             ) {
                 if (response.isSuccessful) {
-                    liveData.value = UiState.Success(
+                    loginData.value = UiState.Success(
                         User(
                             request.authenticationId,
                             request.password,
@@ -113,21 +117,21 @@ class UserViewModel() : ViewModel() {
                     try {
                         val errorJson = JSONObject(error)
                         val errorMessage = errorJson.getString("message")
-                        liveData.value = UiState.Error(errorMessage)
+                        loginData.value = UiState.Error(errorMessage)
                     } catch (e: Exception) {
-                        liveData.value = UiState.Error("로그인 실패  에러 메시지 파싱 실패")
+                        loginData.value = UiState.Error("로그인 실패  에러 메시지 파싱 실패")
                     }
                 }
             }
 
             override fun onFailure(call: Call<ResponseLoginDto>, t: Throwable) {
-                liveData.value = UiState.Error("서버 에러")
+                loginData.value = UiState.Error("서버 에러")
             }
         })
     }
 
     fun getInfo(userid: String) {
-        liveData.value = UiState.Loading
+        mainUserData.value = UiState.Loading
 
         authService.getUserInfo(userid).enqueue(object : Callback<ResponseUserInfoDto> {
             override fun onResponse(
@@ -136,15 +140,15 @@ class UserViewModel() : ViewModel() {
             ) {
                 if (response.isSuccessful) {
                     val user = response.body()?.data
-                    liveData.value = UiState.Success(user?.toUser() ?: User("", "", "", ""))
+                    mainUserData.value = UiState.Success(user?.toUser() ?: User("", "", "", ""))
                 } else {
                     val error = response.errorBody()?.string()
                     try {
                         val errorJson = JSONObject(error)
                         val errorMessage = errorJson.getString("message")
-                        liveData.value = UiState.Error(errorMessage)
+                        mainUserData.value = UiState.Error(errorMessage)
                     } catch (e: Exception) {
-                        liveData.value = UiState.Error("로그인 실패  에러 메시지 파싱 실패")
+                        mainUserData.value = UiState.Error("getinfo 실패  에러 메시지 파싱 실패")
                     }
                 }
             }

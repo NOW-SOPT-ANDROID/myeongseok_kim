@@ -56,7 +56,7 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
     private fun navToLogin(user: User) {
         val intent = Intent(this@SignUpActivity, LoginActivity::class.java)
         intent.putExtra(TAG_USER, user)
-        startActivity(intent)
+        setResult(RESULT_OK, intent)
         finish()
     }
 

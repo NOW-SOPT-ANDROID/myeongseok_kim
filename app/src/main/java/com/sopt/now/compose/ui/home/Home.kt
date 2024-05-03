@@ -127,7 +127,7 @@ fun MyProfileScreen(myInfo: User) {
         )
         TextWithTitle(
             title = stringResource(id = R.string.all_mbti),
-            contents = myInfo.mbti
+            contents = myInfo.phonenumber
         )
     }
 }

@@ -143,7 +143,7 @@ private fun signUpButtonEvent(
 
 private fun validateUserInfo(user: User): Boolean =
     validateID(user.id) && validatePassword(user.password) && validateNickName(user.nickname) && validateMBTI(
-        user.mbti
+        user.phonenumber
     )
 
 private fun validateID(text: String): Boolean = text.length in 6..10

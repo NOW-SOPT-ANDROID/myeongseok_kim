@@ -4,8 +4,11 @@ import com.sopt.now.compose.data.datasource.request.RequestLoginDto
 import com.sopt.now.compose.data.datasource.request.RequestSignUpDto
 import com.sopt.now.compose.data.datasource.response.ResponseLoginDto
 import com.sopt.now.compose.data.datasource.response.ResponseSignUpDto
+import com.sopt.now.compose.data.datasource.response.ResponseUserInfoDto
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface AuthService {
@@ -18,4 +21,9 @@ interface AuthService {
     fun login(
         @Body request: RequestLoginDto,
     ): Call<ResponseLoginDto>
+
+    @GET("/member/info")
+    fun getUserInfo(
+        @Header("memberid") userId: String?,
+    ): Call<ResponseUserInfoDto>
 }

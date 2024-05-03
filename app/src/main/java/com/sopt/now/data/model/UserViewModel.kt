@@ -1,4 +1,5 @@
 package com.sopt.now.data.model
+
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
@@ -10,6 +11,7 @@ import com.sopt.now.compose.data.datasource.request.RequestLoginDto
 import com.sopt.now.compose.data.datasource.request.RequestSignUpDto
 import com.sopt.now.compose.data.datasource.response.ResponseLoginDto
 import com.sopt.now.compose.data.datasource.response.ResponseSignUpDto
+import com.sopt.now.compose.data.datasource.response.ResponseUserInfoDto
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -124,9 +126,38 @@ class UserViewModel() : ViewModel() {
         })
     }
 
+    fun getInfo(userid: String) {
+        liveData.value = UiState.Loading
+
+        authService.getUserInfo(userid).enqueue(object : Callback<ResponseUserInfoDto> {
+            override fun onResponse(
+                call: Call<ResponseUserInfoDto>,
+                response: Response<ResponseUserInfoDto>,
+            ) {
+                if (response.isSuccessful) {
+                    val user = response.body()?.data
+                    liveData.value = UiState.Success(user?.toUser() ?: User("", "", "", ""))
+                } else {
+                    val error = response.errorBody()?.string()
+                    try {
+                        val errorJson = JSONObject(error)
+                        val errorMessage = errorJson.getString("message")
+                        liveData.value = UiState.Error(errorMessage)
+                    } catch (e: Exception) {
+                        liveData.value = UiState.Error("로그인 실패  에러 메시지 파싱 실패")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseUserInfoDto>, t: Throwable) {
+                liveData.value = UiState.Error("서버 에러")
+            }
+        })
+    }
+
     fun setMyProfile(data: User) {
         _myInfo.value = data
-        _myProfile.value = Profile.MyProfile(
+        _myProfile.value = Profile(
             R.drawable.img_profile,
             data.nickname,
             data.phonenumber

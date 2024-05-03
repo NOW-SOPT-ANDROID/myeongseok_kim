@@ -16,13 +16,16 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -32,15 +35,38 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.sopt.now.compose.R
+import com.sopt.now.compose.component.UiState
 import com.sopt.now.compose.component.bottomnavigation.BottomNavigation
 import com.sopt.now.compose.component.bottomnavigation.BottomNavigationItem
 import com.sopt.now.compose.component.text.TextWithTitle
+import com.sopt.now.compose.component.toastMessage
 import com.sopt.now.data.model.User
 import com.sopt.now.data.model.UserViewModel
 
 @Composable
 fun Home(navHostController: NavHostController, viewModel: UserViewModel) {
     var selectedItem by remember { mutableIntStateOf(0) }
+    val authState by viewModel.liveData.observeAsState()
+    val context = LocalContext.current
+
+    LaunchedEffect(authState) {
+        authState?.let { state ->
+            when (state) {
+                is UiState.Loading -> {
+                }
+
+                is UiState.Success -> {
+                    viewModel.setMyProfile(state.data)
+                }
+
+                is UiState.Error -> {
+                    context.toastMessage(state.errorMessage)
+                }
+            }
+        }
+    }
+    viewModel.getInfo(viewModel.myInfo.value.userid)
+
     val items = listOf(
         BottomNavigationItem(
             icon = Icons.Filled.Home,
@@ -126,7 +152,7 @@ fun MyProfileScreen(myInfo: User) {
             contents = myInfo.password
         )
         TextWithTitle(
-            title = stringResource(id = R.string.all_mbti),
+            title = stringResource(id = R.string.all_number),
             contents = myInfo.phonenumber
         )
     }

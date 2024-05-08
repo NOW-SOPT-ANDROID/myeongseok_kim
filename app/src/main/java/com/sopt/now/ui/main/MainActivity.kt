@@ -25,12 +25,12 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
 
     private fun initLayout() {
         initMainFragment()
-        initObserver()
+        initMainStateObserver()
         getUserData()
         clickButtonNavigation()
     }
 
-    private fun initObserver() {
+    private fun initMainStateObserver() {
         viewModel.myInfo.observe(this) { state ->
             when (state) {
                 is UiState.Loading -> Unit

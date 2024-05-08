@@ -29,7 +29,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
     private fun initView() {
         setResultNext()
         initButtons()
-        initObserver()
+        initLoginStateObserver()
     }
 
     private fun setResultNext() {
@@ -52,8 +52,8 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
         initLoginBtnClickListener()
     }
 
-    private fun initObserver() {
-        viewModel.liveData.observe(this) { state ->
+    private fun initLoginStateObserver() {
+        viewModel.loginState.observe(this) { state ->
             when (state) {
                 is UiState.Loading -> Unit
                 is UiState.Success -> navToHome(state.data)
@@ -63,11 +63,10 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
     }
 
     private fun navToHome(user: User) {
-        val intent = Intent(this, MainActivity::class.java)
-        with(intent) {
+        val intent = Intent(this, MainActivity::class.java).apply {
             putExtra(TAG_USER, user)
-            startActivity(this)
         }
+        startActivity(intent)
     }
 
     private fun initSignUpBtnClickListener() {

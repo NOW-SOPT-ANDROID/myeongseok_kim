@@ -4,6 +4,9 @@ import com.sopt.now.data.api.ServicePool
 import com.sopt.now.data.datasouce.request.RequestSignUpDto
 import com.sopt.now.data.datasouce.response.BaseResponse
 import com.sopt.now.data.model.User
+import com.sopt.now.util.StringNetworkError.FAIL_ERROR
+import com.sopt.now.util.StringNetworkError.SERVER_ERROR
+import com.sopt.now.util.StringNetworkError.SIGNUP
 import com.sopt.now.util.UiState
 import org.json.JSONObject
 import retrofit2.Call
@@ -12,10 +15,12 @@ import retrofit2.Response
 
 class SignUpViewModel : ViewModel() {
     private val authService by lazy { ServicePool.authService }
-    val liveData = MutableLiveData<UiState<User>>()
+
+    private val _signUpState = MutableLiveData<UiState<User>>()
+    val signUpState = _signUpState
 
     fun signUp(request: RequestSignUpDto) {
-        liveData.value = UiState.Loading
+        _signUpState.value = UiState.Loading
 
         authService.signUp(request).enqueue(object : Callback<BaseResponse<Unit>> {
             override fun onResponse(
@@ -24,22 +29,23 @@ class SignUpViewModel : ViewModel() {
             ) {
                 if (response.isSuccessful) {
                     val userId = response.headers()["Location"]
-                    liveData.value = UiState.Success(request.toUserWithUserId(userId.toString()))
+                    _signUpState.value = UiState.Success(request.toUserWithUserId(userId.toString()))
                 } else {
                     val error = response.errorBody()?.string()
                     try {
                         val errorJson = JSONObject(error)
                         val errorMessage = errorJson.getString("message")
-                        liveData.value = UiState.Error(errorMessage)
+                        _signUpState.value = UiState.Error(errorMessage)
                     } catch (e: Exception) {
-                        liveData.value = UiState.Error("회원가입 실패: 에러 메시지 파싱 실패")
+                        _signUpState.value = UiState.Error(FAIL_ERROR.format(SIGNUP))
                     }
                 }
             }
 
             override fun onFailure(call: Call<BaseResponse<Unit>>, t: Throwable) {
-                liveData.value = UiState.Error("서버 에러")
+                _signUpState.value = UiState.Error(SERVER_ERROR)
             }
         })
     }
+
 }

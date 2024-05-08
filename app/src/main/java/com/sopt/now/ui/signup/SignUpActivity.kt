@@ -13,6 +13,7 @@ import com.sopt.now.ui.login.LoginActivity.Companion.TAG_USER
 import com.sopt.now.util.BindingActivity
 import com.sopt.now.util.UiState
 import com.sopt.now.util.toast
+
 class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_sign_up) {
     private val viewModel by viewModels<SignUpViewModel>()
 
@@ -27,15 +28,17 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
     }
 
     private fun initObserver() {
-        viewModel.liveData.observe(this) { state ->
+        viewModel.signUpState.observe(this) { state ->
             when (state) {
                 is UiState.Loading -> {
 
                 }
+
                 is UiState.Success -> {
                     toast("회원가입 성공 userid = ${state.data.userId} 입니다!")
                     navToLogin(state.data)
                 }
+
                 is UiState.Error -> {
                     toast(state.errorMessage)
                 }
@@ -44,13 +47,13 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
     }
 
     private fun initButton() {
-        binding.btnLogin.setOnClickListener {
-            signUpEvent()
-        }
+        initSignUpBtnClickListener()
     }
 
-    private fun signUpEvent() {
-        viewModel.signUp(getSignUpRequestDto())
+    private fun initSignUpBtnClickListener() {
+        binding.btnLogin.setOnClickListener {
+            viewModel.signUp(getSignUpRequestDto())
+        }
     }
 
     private fun navToLogin(user: User) {
@@ -60,16 +63,10 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
         finish()
     }
 
-    private fun getSignUpRequestDto(): RequestSignUpDto {
-        val id = binding.etSignupId.text.toString()
-        val password = binding.etSignupPassword.text.toString()
-        val nickname = binding.etSignupNickname.text.toString()
-        val mbti = binding.etSignupNumbers.text.toString()
-        return RequestSignUpDto(
-            authenticationId = id,
-            password = password,
-            nickname = nickname,
-            phone = mbti
-        )
-    }
+    private fun getSignUpRequestDto() = RequestSignUpDto(
+        authenticationId = binding.etSignupId.text.toString(),
+        password = binding.etSignupPassword.text.toString(),
+        nickname = binding.etSignupNickname.text.toString(),
+        phone = binding.etSignupNumbers.text.toString()
+    )
 }

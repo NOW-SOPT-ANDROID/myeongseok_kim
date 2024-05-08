@@ -1,9 +1,9 @@
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.sopt.now.data.ServicePool
-import com.sopt.now.data.User
-import com.sopt.now.data.datasouce.RequestSignUpDto
-import com.sopt.now.data.datasouce.ResponseSignUpDto
+import com.sopt.now.data.api.ServicePool
+import com.sopt.now.data.datasouce.request.RequestSignUpDto
+import com.sopt.now.data.datasouce.response.BaseResponse
+import com.sopt.now.data.model.User
 import com.sopt.now.util.UiState
 import org.json.JSONObject
 import retrofit2.Call
@@ -17,10 +17,10 @@ class SignUpViewModel : ViewModel() {
     fun signUp(request: RequestSignUpDto) {
         liveData.value = UiState.Loading
 
-        authService.signUp(request).enqueue(object : Callback<ResponseSignUpDto> {
+        authService.signUp(request).enqueue(object : Callback<BaseResponse<Unit>> {
             override fun onResponse(
-                call: Call<ResponseSignUpDto>,
-                response: Response<ResponseSignUpDto>,
+                call: Call<BaseResponse<Unit>>,
+                response: Response<BaseResponse<Unit>>,
             ) {
                 if (response.isSuccessful) {
                     val userId = response.headers()["Location"]
@@ -37,7 +37,7 @@ class SignUpViewModel : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<ResponseSignUpDto>, t: Throwable) {
+            override fun onFailure(call: Call<BaseResponse<Unit>>, t: Throwable) {
                 liveData.value = UiState.Error("서버 에러")
             }
         })

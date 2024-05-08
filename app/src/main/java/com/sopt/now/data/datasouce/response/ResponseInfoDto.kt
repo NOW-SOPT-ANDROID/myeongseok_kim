@@ -1,6 +1,6 @@
-package com.sopt.now.data.datasouce
+package com.sopt.now.data.datasouce.response
 
-import com.sopt.now.data.User
+import com.sopt.now.data.model.User
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -23,5 +23,5 @@ data class UserData(
     @SerialName("phone")
     val phone: String,
 ) {
-    fun toUser() = User(id = authenticationId, password = "", nickname = nickname, phonenumber = phone)
+    fun toUser() = User(id = authenticationId, password = "", nickname = nickname, phoneNumber = phone)
 }

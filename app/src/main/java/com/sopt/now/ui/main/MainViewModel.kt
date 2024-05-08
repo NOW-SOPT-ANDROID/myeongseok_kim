@@ -3,10 +3,10 @@ package com.sopt.now.ui.main
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.sopt.now.data.Profile
-import com.sopt.now.data.ServicePool.infoService
-import com.sopt.now.data.User
-import com.sopt.now.data.datasouce.ResponseInfoDto
+import com.sopt.now.data.model.Profile
+import com.sopt.now.data.api.ServicePool.infoService
+import com.sopt.now.data.model.User
+import com.sopt.now.data.datasouce.response.ResponseInfoDto
 import com.sopt.now.util.UiState
 import org.json.JSONObject
 import retrofit2.Call
@@ -32,7 +32,6 @@ class MainViewModel : ViewModel() {
 
     fun getInfo(userid: String) {
         myInfo.value = UiState.Loading
-
         infoService.getUserInfo(userid).enqueue(object : Callback<ResponseInfoDto> {
             override fun onResponse(
                 call: Call<ResponseInfoDto>,
@@ -66,9 +65,10 @@ class MainViewModel : ViewModel() {
     }
 
     fun updateProfileWithMyProfile() {
+        Log.d("test", "updateProfileWithMyProfile: $_myProfile Value : ${_myProfile.value}")
         _userData.value =
             listOf(
-                Profile(_myProfile.value!!.nickname, _myProfile.value!!.phonenumber),
+                Profile(_myProfile.value!!.nickname, _myProfile.value!!.phoneNumber),
                 Profile("주효은", "INFP"),
                 Profile("이유빈", "ENFP"),
                 Profile("김민우", "ISTP"),

@@ -1,4 +1,4 @@
-package com.sopt.now.data
+package com.sopt.now.data.model
 
 data class Profile(
     val name: String,

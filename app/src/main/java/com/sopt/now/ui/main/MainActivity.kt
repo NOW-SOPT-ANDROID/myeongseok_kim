@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import com.sopt.now.R
-import com.sopt.now.data.User
+import com.sopt.now.data.model.User
 import com.sopt.now.databinding.ActivityMainBinding
 import com.sopt.now.ui.login.LoginActivity.Companion.TAG_USER
 import com.sopt.now.ui.main.home.MainHomeFragment
@@ -33,18 +33,14 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
     private fun initObserver() {
         viewModel.myInfo.observe(this) { state ->
             when (state) {
-                is UiState.Loading -> {
-
-                }
-
+                is UiState.Loading -> Unit
                 is UiState.Success -> {
                     viewModel.setMyProfile(state.data)
                     viewModel.updateProfileWithMyProfile()
                 }
 
-                is UiState.Error -> {
-                    toast(state.errorMessage)
-                }
+                is UiState.Error -> toast(state.errorMessage)
+
             }
         }
     }
@@ -85,6 +81,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
 
     private fun getUserData() {
         val user = intent.getSafeParcelable<User>(TAG_USER) ?: User("", "", "", "")
-        viewModel.getInfo(user.userid)
+        viewModel.getInfo(user.userId)
     }
 }

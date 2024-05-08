@@ -6,8 +6,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.sopt.now.R
-import com.sopt.now.data.User
-import com.sopt.now.data.datasouce.RequestLoginDto
+import com.sopt.now.data.model.User
+import com.sopt.now.data.datasouce.request.RequestLoginDto
 import com.sopt.now.databinding.ActivityLoginBinding
 import com.sopt.now.ui.main.MainActivity
 import com.sopt.now.ui.signup.SignUpActivity
@@ -28,7 +28,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
 
     private fun initView() {
         setResultNext()
-        initButton()
+        initButtons()
         initObserver()
     }
 
@@ -47,30 +47,17 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
         }
     }
 
-    private fun initButton() {
-        binding.btnLoginToSignup.setOnClickListener {
-            initSignUpBtnClickListener()
-        }
-
-        binding.btnLogin.setOnClickListener {
-            loginButtonEvent()
-        }
+    private fun initButtons() {
+        initSignUpBtnClickListener()
+        initLoginBtnClickListener()
     }
 
     private fun initObserver() {
         viewModel.liveData.observe(this) { state ->
             when (state) {
-                is UiState.Loading -> {
-
-                }
-
-                is UiState.Success -> {
-                    navToHome(state.data)
-                }
-
-                is UiState.Error -> {
-                    toast(state.errorMessage)
-                }
+                is UiState.Loading -> Unit
+                is UiState.Success -> navToHome(state.data)
+                is UiState.Error -> toast(state.errorMessage)
             }
         }
     }
@@ -84,13 +71,17 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
     }
 
     private fun initSignUpBtnClickListener() {
-        Intent(this, SignUpActivity::class.java).let {
-            resultLauncher.launch(it)
+        binding.btnLoginToSignup.setOnClickListener {
+            Intent(this, SignUpActivity::class.java).let {
+                resultLauncher.launch(it)
+            }
         }
     }
 
-    private fun loginButtonEvent() {
-        viewModel.login(getLoginRequestDto())
+    private fun initLoginBtnClickListener() {
+        binding.btnLogin.setOnClickListener {
+            viewModel.login(getLoginRequestDto())
+        }
     }
 
     private fun getLoginRequestDto() =

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.sopt.now.data.Profile
+import com.sopt.now.data.model.Profile
 import com.sopt.now.databinding.ItemHomeFeedBinding
 import com.sopt.now.databinding.ItemHomeFeedMeBinding
 
@@ -32,8 +32,6 @@ class MainHomeAdapter(context: Context) :
         }
     }
 
-    override fun getItemCount(): Int = userList.size
-
     override fun getItemViewType(position: Int): Int {
         if (position == 0) return ME
         return FRIENDS
@@ -41,8 +39,8 @@ class MainHomeAdapter(context: Context) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is MainHomeMeViewHolder -> holder.onBind(userList[position] )
-            is MainHomeViewHolder -> holder.onBind(userList[position])
+            is MainHomeMeViewHolder -> holder.onBind(currentList[position] )
+            is MainHomeViewHolder -> holder.onBind(currentList[position])
         }
     }
 

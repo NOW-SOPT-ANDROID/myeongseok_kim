@@ -3,10 +3,10 @@ package com.sopt.now.ui.login
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.sopt.now.data.ServicePool
-import com.sopt.now.data.User
-import com.sopt.now.data.datasouce.RequestLoginDto
-import com.sopt.now.data.datasouce.ResponseLoginDto
+import com.sopt.now.data.api.ServicePool
+import com.sopt.now.data.datasouce.request.RequestLoginDto
+import com.sopt.now.data.datasouce.response.BaseResponse
+import com.sopt.now.data.model.User
 import com.sopt.now.util.UiState
 import org.json.JSONObject
 import retrofit2.Call
@@ -14,26 +14,25 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class LoginViewModel : ViewModel() {
-    private val loginService by lazy { ServicePool.loginService }
+    private val loginService by lazy { ServicePool.authService }
     val liveData = MutableLiveData<UiState<User>>()
 
     fun login(request: RequestLoginDto) {
         liveData.value = UiState.Loading
 
-        loginService.login(request).enqueue(object : Callback<ResponseLoginDto> {
+        loginService.login(request).enqueue(object : Callback<BaseResponse<Unit>> {
             override fun onResponse(
-                call: Call<ResponseLoginDto>,
-                response: Response<ResponseLoginDto>,
+                call: Call<BaseResponse<Unit>>,
+                response: Response<BaseResponse<Unit>>,
             ) {
                 if (response.isSuccessful) {
-                    Log.d("test_loginservice", "onResponse: ${response.body()}")
                     liveData.value = UiState.Success(
                         User(
                             request.authenticationId,
                             request.password,
                             "",
                             "",
-                            userid = response.headers()["location"].toString()
+                            userId = response.headers()["location"].toString()
                         )
                     )
                 } else {
@@ -48,7 +47,7 @@ class LoginViewModel : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<ResponseLoginDto>, t: Throwable) {
+            override fun onFailure(call: Call<BaseResponse<Unit>>, t: Throwable) {
                 liveData.value = UiState.Error("서버 에러")
             }
         })

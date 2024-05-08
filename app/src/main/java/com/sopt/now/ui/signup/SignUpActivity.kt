@@ -5,8 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.sopt.now.R
-import com.sopt.now.data.User
-import com.sopt.now.data.datasouce.RequestSignUpDto
+import com.sopt.now.data.model.User
+import com.sopt.now.data.datasouce.request.RequestSignUpDto
 import com.sopt.now.databinding.ActivitySignUpBinding
 import com.sopt.now.ui.login.LoginActivity
 import com.sopt.now.ui.login.LoginActivity.Companion.TAG_USER
@@ -33,7 +33,7 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
 
                 }
                 is UiState.Success -> {
-                    toast("회원가입 성공 userid = ${state.data.userid} 입니다!")
+                    toast("회원가입 성공 userid = ${state.data.userId} 입니다!")
                     navToLogin(state.data)
                 }
                 is UiState.Error -> {

@@ -1,4 +1,4 @@
-package com.sopt.now.data.datasouce
+package com.sopt.now.data.datasouce.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

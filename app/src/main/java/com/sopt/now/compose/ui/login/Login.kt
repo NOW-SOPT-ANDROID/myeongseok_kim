@@ -1,6 +1,5 @@
 package com.sopt.now.compose.ui.login
 
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,7 +12,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,16 +32,37 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.sopt.now.compose.R
+import com.sopt.now.compose.component.UiState
 import com.sopt.now.compose.component.textfield.TextFieldWithTitle
 import com.sopt.now.compose.component.toastMessage
+import com.sopt.now.compose.data.datasource.request.RequestLoginDto
 import com.sopt.now.compose.navigation.Screen
 import com.sopt.now.data.model.UserViewModel
-import com.sopt.now.data.model.User
 
 @Composable
 fun Login(navHostController: NavHostController, viewModel: UserViewModel) {
     var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val authState by viewModel.loginData.observeAsState()
+    val context = LocalContext.current
+
+    LaunchedEffect(authState) {
+        authState?.let { state ->
+            when (state) {
+                is UiState.Loading -> {
+                }
+
+                is UiState.Success -> {
+                    context.toastMessage(context.getString(R.string.login_Success))
+                    navHostController.navigate(Screen.Home.route)
+                }
+
+                is UiState.Error -> {
+                    context.toastMessage(state.errorMessage)
+                }
+            }
+        }
+    }
     Column(
         modifier = Modifier
             .padding(10.dp)
@@ -86,10 +108,9 @@ fun Login(navHostController: NavHostController, viewModel: UserViewModel) {
             ) {
                 Text(text = stringResource(id = R.string.all_enroll))
             }
-            val context = LocalContext.current
             Button(
                 onClick = {
-                    loginButtonEvent(context, viewModel, id, password, navHostController)
+                    viewModel.login(RequestLoginDto(id, password))
                 },
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -99,22 +120,6 @@ fun Login(navHostController: NavHostController, viewModel: UserViewModel) {
                 Text(text = stringResource(id = R.string.all_input))
             }
         }
-    }
-}
-
-private fun loginButtonEvent(
-    context: Context,
-    viewModel: UserViewModel,
-    id: String,
-    password: String,
-    navHostController: NavHostController
-) {
-    if (viewModel.validateLogin(
-            user = User(id, password, "", "")
-        )
-    ) {
-        navHostController.navigate(Screen.Home.route)
-        context.toastMessage(message = R.string.login_Success)
     }
 }
 

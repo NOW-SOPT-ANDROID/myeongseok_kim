@@ -2,12 +2,25 @@ package com.sopt.now.ui.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.sopt.now.data.Profile
-import com.sopt.now.data.User
+import com.sopt.now.data.api.ServicePool.infoService
+import com.sopt.now.data.datasouce.response.ResponseInfoDto
+import com.sopt.now.data.model.Profile
+import com.sopt.now.data.model.User
+import com.sopt.now.util.StringNetworkError.FAIL_ERROR
+import com.sopt.now.util.StringNetworkError.LOGIN
+import com.sopt.now.util.StringNetworkError.SERVER_ERROR
+import com.sopt.now.util.UiState
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainViewModel : ViewModel() {
     private val _userData = MutableLiveData<List<Profile>>()
     val userData = _userData
+
+    private val _myInfo = MutableLiveData<UiState<User>>()
+    val myInfo = _myInfo
 
     private val _myProfile = MutableLiveData<User>()
     val myProfile = _myProfile
@@ -15,9 +28,37 @@ class MainViewModel : ViewModel() {
     init {
         _userData.value =
             listOf(
-                Profile.info("배찬우", "INFP"),
-                Profile.info("배찬우", "INFP"),
+                Profile("배찬우", "INFP"),
+                Profile("배찬우", "INFP"),
             )
+    }
+
+    fun getInfo(userid: String) {
+        _myInfo.value = UiState.Loading
+        infoService.getUserInfo(userid).enqueue(object : Callback<ResponseInfoDto> {
+            override fun onResponse(
+                call: Call<ResponseInfoDto>,
+                response: Response<ResponseInfoDto>,
+            ) {
+                if (response.isSuccessful) {
+                    val user = response.body()?.data
+                    _myInfo.value = UiState.Success(user?.toUser() ?: User("", "", "", ""))
+                } else {
+                    val error = response.errorBody()?.string()
+                    try {
+                        val errorJson = JSONObject(error)
+                        val errorMessage = errorJson.getString("message")
+                        _myInfo.value = UiState.Error(errorMessage)
+                    } catch (e: Exception) {
+                        _myInfo.value = UiState.Error(FAIL_ERROR.format(LOGIN))
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseInfoDto>, t: Throwable) {
+                _myInfo.value = UiState.Error(SERVER_ERROR)
+            }
+        })
     }
 
     fun setMyProfile(data: User) {
@@ -27,13 +68,12 @@ class MainViewModel : ViewModel() {
     fun updateProfileWithMyProfile() {
         _userData.value =
             listOf(
-
-                Profile.info(name = _myProfile.value?.nickname ?:"", mbti = _myProfile.value?.mbti ?:""),
-                Profile.info("주효은", "INFP"),
-                Profile.info("이유빈", "ENFP"),
-                Profile.info("김민우", "ISTP"),
-                Profile.info("곽의진", "CUTE"),//자기소개에서 발췌
-                Profile.info("유정현", "ESTJ"),
+                Profile(_myProfile.value!!.nickname, _myProfile.value!!.phoneNumber),
+                Profile("주효은", "INFP"),
+                Profile("이유빈", "ENFP"),
+                Profile("김민우", "ISTP"),
+                Profile("곽의진", "CUTE"),//자기소개에서 발췌
+                Profile("유정현", "ESTJ"),
             )
     }
 }

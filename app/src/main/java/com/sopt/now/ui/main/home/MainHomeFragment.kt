@@ -16,7 +16,6 @@ class MainHomeFragment : BindingFragment<FragmentMainHomeBinding>(R.layout.fragm
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
         setUserList()
-        updateUser()
     }
 
     private fun initAdapter() {
@@ -30,6 +29,5 @@ class MainHomeFragment : BindingFragment<FragmentMainHomeBinding>(R.layout.fragm
         }
     }
 
-    private fun updateUser() = viewModel.updateProfileWithMyProfile()
 
 }

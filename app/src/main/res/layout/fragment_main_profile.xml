@@ -59,22 +59,22 @@
             app:layout_constraintTop_toBottomOf="@id/tv_main_password" />
 
         <TextView
-            android:id="@+id/tv_main_mbti"
+            android:id="@+id/tv_main_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="@string/singUp_MBTI"
+            android:text="@string/all_number"
             android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_main_password_content" />
 
         <TextView
-            android:id="@+id/tv_main_mbti_content"
+            android:id="@+id/tv_main_number_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_main_mbti" />
+            app:layout_constraintTop_toBottomOf="@id/tv_main_number" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

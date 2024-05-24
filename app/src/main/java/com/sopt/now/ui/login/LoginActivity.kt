@@ -2,58 +2,34 @@ package com.sopt.now.ui.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import com.sopt.now.R
-import com.sopt.now.data.User
+import com.sopt.now.data.model.User
+import com.sopt.now.data.datasouce.request.RequestLoginDto
 import com.sopt.now.databinding.ActivityLoginBinding
 import com.sopt.now.ui.main.MainActivity
 import com.sopt.now.ui.signup.SignUpActivity
-
 import com.sopt.now.util.BindingActivity
+import com.sopt.now.util.UiState
 import com.sopt.now.util.getSafeParcelable
 import com.sopt.now.util.toast
 
 class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_login) {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-
+    private val viewModel by viewModels<LoginViewModel>()
     private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initLayout()
+        initView()
     }
 
-    private fun initLayout() {
+    private fun initView() {
         setResultNext()
-        initButton()
-    }
-
-    private fun initButton() {
-        binding.btnLoginToSignup.setOnClickListener {
-            initSignUpBtnClickListener()
-        }
-
-        binding.btnLogin.setOnClickListener {
-            initLoginBtnClickListener()
-        }
-    }
-
-    private fun initSignUpBtnClickListener() {
-        Intent(this, SignUpActivity::class.java).let {
-            resultLauncher.launch(it)
-        }
-    }
-
-    private fun initLoginBtnClickListener() {
-        if (validateLogin()) {
-            val intent = Intent(this, MainActivity::class.java)
-            with(intent) {
-                putExtra(TAG_USER, user)
-                startActivity(this)
-            }
-        }
+        initButtons()
+        initLoginStateObserver()
     }
 
     private fun setResultNext() {
@@ -71,29 +47,49 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
         }
     }
 
-    private fun validateLogin(): Boolean {
-        return validateId() && validatePassword()
+    private fun initButtons() {
+        initSignUpBtnClickListener()
+        initLoginBtnClickListener()
     }
 
-    private fun validateId(): Boolean {
-        require(binding.etLoginId.text.toString() == user.id) {
-            toast(TOAST_NOT_EQUAL_ID)
-            return false
+    private fun initLoginStateObserver() {
+        viewModel.loginState.observe(this) { state ->
+            when (state) {
+                is UiState.Loading -> Unit
+                is UiState.Success -> navToHome(state.data)
+                is UiState.Error -> toast(state.errorMessage)
+            }
         }
-        return true
     }
 
-    private fun validatePassword(): Boolean {
-        require(binding.etLoginPassword.text.toString() == user.password) {
-            toast(TOAST_NOT_EQUAL_PASSWORD)
-            return false
+    private fun navToHome(user: User) {
+        val intent = Intent(this, MainActivity::class.java).apply {
+            putExtra(TAG_USER, user)
         }
-        return true
+        startActivity(intent)
     }
+
+    private fun initSignUpBtnClickListener() {
+        binding.btnLoginToSignup.setOnClickListener {
+            Intent(this, SignUpActivity::class.java).let {
+                resultLauncher.launch(it)
+            }
+        }
+    }
+
+    private fun initLoginBtnClickListener() {
+        binding.btnLogin.setOnClickListener {
+            viewModel.login(getLoginRequestDto())
+        }
+    }
+
+    private fun getLoginRequestDto() =
+        RequestLoginDto(
+            authenticationId = binding.etLoginId.text.toString(),
+            password = binding.etLoginPassword.text.toString()
+        )
 
     companion object {
         const val TAG_USER = "user"
-        const val TOAST_NOT_EQUAL_ID = "아이디가 일치하지 않습니다."
-        const val TOAST_NOT_EQUAL_PASSWORD = "비밀번호가 일치하지 않습니다."
     }
 }

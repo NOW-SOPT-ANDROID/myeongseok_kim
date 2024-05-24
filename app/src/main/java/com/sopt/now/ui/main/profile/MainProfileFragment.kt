@@ -21,9 +21,8 @@ class MainProfileFragment :
         with(binding) {
             tvMainIdContent.text = viewModel.myProfile.value?.id
             tvMainPasswordContent.text = viewModel.myProfile.value?.password
-            tvMainNickname.text =
-                getString(R.string.main_welcome).format(viewModel.myProfile.value?.nickname)
-            tvMainMbtiContent.text = viewModel.myProfile.value?.mbti
+            tvMainNickname.text = getString(R.string.main_welcome).format(viewModel.myProfile.value?.nickname)
+            tvMainNumberContent.text = viewModel.myProfile.value?.phoneNumber
         }
     }
 }

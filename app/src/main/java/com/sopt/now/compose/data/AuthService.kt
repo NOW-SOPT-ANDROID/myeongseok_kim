@@ -6,6 +6,7 @@ import com.sopt.now.compose.data.datasource.response.ResponseLoginDto
 import com.sopt.now.compose.data.datasource.response.ResponseSignUpDto
 import com.sopt.now.compose.data.datasource.response.ResponseUserInfoDto
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -23,7 +24,7 @@ interface AuthService {
     ): Call<ResponseLoginDto>
 
     @GET("/member/info")
-    fun getUserInfo(
+    suspend fun getUserInfo(
         @Header("memberid") userId: String?,
-    ): Call<ResponseUserInfoDto>
+    ): Response<ResponseUserInfoDto>
 }

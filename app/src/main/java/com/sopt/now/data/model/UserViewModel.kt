@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.sopt.now.compose.R
 import com.sopt.now.compose.component.UiState
 import com.sopt.now.compose.data.ServicePool
@@ -13,9 +14,11 @@ import com.sopt.now.compose.data.datasource.request.RequestSignUpDto
 import com.sopt.now.compose.data.datasource.response.ResponseLoginDto
 import com.sopt.now.compose.data.datasource.response.ResponseSignUpDto
 import com.sopt.now.compose.data.datasource.response.ResponseUserInfoDto
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
 
 class UserViewModel() : ViewModel() {
@@ -132,31 +135,20 @@ class UserViewModel() : ViewModel() {
 
     fun getInfo(userid: String) {
         mainUserData.value = UiState.Loading
-
-        authService.getUserInfo(userid).enqueue(object : Callback<ResponseUserInfoDto> {
-            override fun onResponse(
-                call: Call<ResponseUserInfoDto>,
-                response: Response<ResponseUserInfoDto>,
-            ) {
-                if (response.isSuccessful) {
-                    val user = response.body()?.data
-                    mainUserData.value = UiState.Success(user?.toUser() ?: User("", "", "", ""))
-                } else {
-                    val error = response.errorBody()?.string()
-                    try {
-                        val errorJson = JSONObject(error)
-                        val errorMessage = errorJson.getString("message")
-                        mainUserData.value = UiState.Error(errorMessage)
-                    } catch (e: Exception) {
-                        mainUserData.value = UiState.Error("getinfo 실패  에러 메시지 파싱 실패")
-                    }
-                }
+        viewModelScope.launch {
+            runCatching {
+                authService.getUserInfo(userid)
+            }.onSuccess { response ->
+                val user = response.body()?.data
+                mainUserData.value = UiState.Success(user?.toUser() ?: User("", "", "", ""))
+            }.onFailure { e ->
+                if (e is HttpException) {
+                    val errorMessage =
+                        JSONObject(e.response()?.errorBody()?.string()).getString("message")
+                    mainUserData.value = UiState.Error(errorMessage)
+                } else mainUserData.value = UiState.Error("에러 ${e.message}")
             }
-
-            override fun onFailure(call: Call<ResponseUserInfoDto>, t: Throwable) {
-                liveData.value = UiState.Error("서버 에러")
-            }
-        })
+        }
     }
 
     fun setMyProfile(data: User) {

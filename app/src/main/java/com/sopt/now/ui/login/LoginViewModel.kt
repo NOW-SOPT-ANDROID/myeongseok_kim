@@ -2,18 +2,16 @@ package com.sopt.now.ui.login
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.sopt.now.data.api.ServicePool
 import com.sopt.now.data.datasouce.request.RequestLoginDto
-import com.sopt.now.data.datasouce.response.BaseResponse
 import com.sopt.now.data.model.User
 import com.sopt.now.util.StringNetworkError.FAIL_ERROR
 import com.sopt.now.util.StringNetworkError.LOGIN
-import com.sopt.now.util.StringNetworkError.SERVER_ERROR
 import com.sopt.now.util.UiState
+import kotlinx.coroutines.launch
 import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import retrofit2.HttpException
 
 class LoginViewModel : ViewModel() {
     private val loginService by lazy { ServicePool.authService }
@@ -22,37 +20,32 @@ class LoginViewModel : ViewModel() {
 
     fun login(request: RequestLoginDto) {
         _loginState.value = UiState.Loading
-
-        loginService.login(request).enqueue(object : Callback<BaseResponse<Unit>> {
-            override fun onResponse(
-                call: Call<BaseResponse<Unit>>,
-                response: Response<BaseResponse<Unit>>,
-            ) {
-                if (response.isSuccessful) {
-                    _loginState.value = UiState.Success(
-                        User(
+        viewModelScope.launch {
+            runCatching {
+                loginService.login(request)
+            }.onSuccess { response ->
+                val userId = response.headers()["Location"].toString()
+                if (response.isSuccessful)
+                    _loginState.value =
+                        UiState.Success( User(
                             request.authenticationId,
                             request.password,
                             "",
                             "",
-                            userId = response.headers()["location"].toString()
-                        )
-                    )
+                            userId = userId
+                        ))
+                else {
+                    val errorMessage =
+                        JSONObject(response.errorBody()?.string()).getString("message")
+                    _loginState.value = UiState.Error(errorMessage.toString())
+                }
+            }.onFailure { e ->
+                if (e is HttpException) {
+                    _loginState.value = UiState.Error(e.message())
                 } else {
-                    val error = response.errorBody()?.string()
-                    try {
-                        val errorJson = JSONObject(error)
-                        val errorMessage = errorJson.getString("message")
-                        _loginState.value = UiState.Error(errorMessage)
-                    } catch (e: Exception) {
-                        _loginState.value = UiState.Error(FAIL_ERROR.format(LOGIN))
-                    }
+                    _loginState.value = UiState.Error(FAIL_ERROR.format(LOGIN))
                 }
             }
-
-            override fun onFailure(call: Call<BaseResponse<Unit>>, t: Throwable) {
-                _loginState.value = UiState.Error(SERVER_ERROR)
-            }
-        })
+        }
     }
 }

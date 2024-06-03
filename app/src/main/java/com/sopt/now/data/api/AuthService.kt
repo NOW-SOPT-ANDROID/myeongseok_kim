@@ -18,7 +18,7 @@ interface AuthService {
 
 
     @POST("member/login")
-    fun login(
+    suspend fun login(
         @Body request: RequestLoginDto,
-    ): Call<BaseResponse<Unit>>
+    ): Response<BaseResponse<Unit>>
 }

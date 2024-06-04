@@ -12,16 +12,17 @@ data class ResponseInfoDto(
     val message: String,
     @SerialName("data")
     val data: UserData
-)
-
-@Serializable
-data class UserData(
-    @SerialName("authenticationId")
-    val authenticationId: String,
-    @SerialName("nickname")
-    val nickname: String,
-    @SerialName("phone")
-    val phone: String,
-) {
-    fun toUser() = User(id = authenticationId, password = "", nickname = nickname, phoneNumber = phone)
+){
+    @Serializable
+    data class UserData(
+        @SerialName("authenticationId")
+        val authenticationId: String,
+        @SerialName("nickname")
+        val nickname: String,
+        @SerialName("phone")
+        val phone: String,
+    ) {
+        fun toUser() = User(id = authenticationId, password = "", nickname = nickname, phoneNumber = phone)
+    }
 }
+

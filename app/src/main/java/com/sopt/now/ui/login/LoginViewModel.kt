@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sopt.now.data.api.ServicePool
-import com.sopt.now.data.datasouce.request.RequestLoginDto
+import com.sopt.now.data.dto.request.RequestLoginDto
 import com.sopt.now.data.model.User
 import com.sopt.now.util.StringNetworkError.FAIL_ERROR
 import com.sopt.now.util.StringNetworkError.LOGIN

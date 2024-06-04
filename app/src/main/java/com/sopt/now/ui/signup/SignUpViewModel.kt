@@ -2,7 +2,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sopt.now.data.api.ServicePool
-import com.sopt.now.data.datasouce.request.RequestSignUpDto
+import com.sopt.now.data.dto.request.RequestSignUpDto
 import com.sopt.now.data.model.User
 import com.sopt.now.util.UiState
 import kotlinx.coroutines.launch

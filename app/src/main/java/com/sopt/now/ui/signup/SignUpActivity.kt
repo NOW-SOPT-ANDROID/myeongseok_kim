@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.sopt.now.R
 import com.sopt.now.data.model.User
-import com.sopt.now.data.datasouce.request.RequestSignUpDto
+import com.sopt.now.data.dto.request.RequestSignUpDto
 import com.sopt.now.databinding.ActivitySignUpBinding
 import com.sopt.now.ui.login.LoginActivity
 import com.sopt.now.ui.login.LoginActivity.Companion.TAG_USER

@@ -1,11 +1,8 @@
 package com.sopt.now.data.api
 
-import com.sopt.now.data.datasouce.request.RequestLoginDto
-import com.sopt.now.data.datasouce.request.RequestSignUpDto
-import com.sopt.now.data.datasouce.response.BaseResponse
-import com.sopt.now.data.datasouce.response.ResponseLoginDto
-import com.sopt.now.data.datasouce.response.ResponseSignUpDto
-import retrofit2.Call
+import com.sopt.now.data.dto.request.RequestLoginDto
+import com.sopt.now.data.dto.request.RequestSignUpDto
+import com.sopt.now.data.dto.response.BaseResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST

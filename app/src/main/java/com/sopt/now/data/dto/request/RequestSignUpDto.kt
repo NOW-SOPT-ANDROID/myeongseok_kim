@@ -1,4 +1,4 @@
-package com.sopt.now.data.datasouce.request
+package com.sopt.now.data.dto.request
 
 import com.sopt.now.data.model.User
 import kotlinx.serialization.SerialName

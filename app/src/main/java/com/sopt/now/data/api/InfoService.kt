@@ -1,6 +1,6 @@
 package com.sopt.now.data.api
 
-import com.sopt.now.data.datasouce.response.ResponseInfoDto
+import com.sopt.now.data.dto.response.ResponseInfoDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header

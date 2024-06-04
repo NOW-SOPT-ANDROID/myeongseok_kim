@@ -7,7 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.sopt.now.R
 import com.sopt.now.data.model.User
-import com.sopt.now.data.datasouce.request.RequestLoginDto
+import com.sopt.now.data.dto.request.RequestLoginDto
 import com.sopt.now.databinding.ActivityLoginBinding
 import com.sopt.now.ui.main.MainActivity
 import com.sopt.now.ui.signup.SignUpActivity

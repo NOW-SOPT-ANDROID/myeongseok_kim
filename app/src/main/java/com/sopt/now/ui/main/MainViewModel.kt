@@ -2,18 +2,16 @@ package com.sopt.now.ui.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.sopt.now.data.api.ServicePool.infoService
-import com.sopt.now.data.datasouce.response.ResponseInfoDto
 import com.sopt.now.data.model.Profile
 import com.sopt.now.data.model.User
 import com.sopt.now.util.StringNetworkError.FAIL_ERROR
 import com.sopt.now.util.StringNetworkError.LOGIN
-import com.sopt.now.util.StringNetworkError.SERVER_ERROR
 import com.sopt.now.util.UiState
+import kotlinx.coroutines.launch
 import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import retrofit2.HttpException
 
 class MainViewModel : ViewModel() {
     private val _userData = MutableLiveData<List<Profile>>()
@@ -35,30 +33,27 @@ class MainViewModel : ViewModel() {
 
     fun getInfo(userid: String) {
         _myInfo.value = UiState.Loading
-        infoService.getUserInfo(userid).enqueue(object : Callback<ResponseInfoDto> {
-            override fun onResponse(
-                call: Call<ResponseInfoDto>,
-                response: Response<ResponseInfoDto>,
-            ) {
+        viewModelScope.launch {
+            runCatching {
+                infoService.getUserInfo(userid)
+            }.onSuccess { response ->
                 if (response.isSuccessful) {
                     val user = response.body()?.data
                     _myInfo.value = UiState.Success(user?.toUser() ?: User("", "", "", ""))
                 } else {
-                    val error = response.errorBody()?.string()
-                    try {
-                        val errorJson = JSONObject(error)
-                        val errorMessage = errorJson.getString("message")
-                        _myInfo.value = UiState.Error(errorMessage)
-                    } catch (e: Exception) {
-                        _myInfo.value = UiState.Error(FAIL_ERROR.format(LOGIN))
-                    }
+                    val errorMessage =
+                        JSONObject(response.errorBody()?.string()).getString("message")
+                    _myInfo.value = UiState.Error(errorMessage.toString())
+                }
+
+            }.onFailure { e ->
+                if (e is HttpException) {
+                    _myInfo.value = UiState.Error(e.message())
+                } else {
+                    _myInfo.value = UiState.Error(FAIL_ERROR.format(LOGIN))
                 }
             }
-
-            override fun onFailure(call: Call<ResponseInfoDto>, t: Throwable) {
-                _myInfo.value = UiState.Error(SERVER_ERROR)
-            }
-        })
+        }
     }
 
     fun setMyProfile(data: User) {

@@ -7,8 +7,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.sopt.now.R
 import com.sopt.now.data.model.User
-import com.sopt.now.data.dto.request.RequestLoginDto
 import com.sopt.now.databinding.ActivityLoginBinding
+import com.sopt.now.domain.entity.request.AuthRequestModel
 import com.sopt.now.ui.main.MainActivity
 import com.sopt.now.ui.signup.SignUpActivity
 import com.sopt.now.util.BindingActivity
@@ -18,7 +18,7 @@ import com.sopt.now.util.toast
 
 class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_login) {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-    private val viewModel by viewModels<LoginViewModel>()
+    private val viewModel: LoginViewModel by viewModels { LoginViewModelFactory() }
     private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,14 +79,16 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
 
     private fun initLoginBtnClickListener() {
         binding.btnLogin.setOnClickListener {
-            viewModel.login(getLoginRequestDto())
+            viewModel.login(getLoginRequest())
         }
     }
 
-    private fun getLoginRequestDto() =
-        RequestLoginDto(
+    private fun getLoginRequest() =
+        AuthRequestModel(
             authenticationId = binding.etLoginId.text.toString(),
-            password = binding.etLoginPassword.text.toString()
+            password = binding.etLoginPassword.text.toString(),
+            nickname = "",
+            phone = ""
         )
 
     companion object {

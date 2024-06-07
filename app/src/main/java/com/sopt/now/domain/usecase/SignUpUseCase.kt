@@ -1,7 +1,7 @@
 package com.sopt.now.domain.usecase
 
-import com.sopt.now.data.dto.request.RequestSignUpDto
 import com.sopt.now.data.model.User
+import com.sopt.now.domain.entity.request.AuthRequestModel
 import com.sopt.now.domain.repository.AuthRepository
 import com.sopt.now.util.UiState
 import kotlinx.coroutines.Dispatchers
@@ -10,10 +10,10 @@ import org.json.JSONObject
 import retrofit2.HttpException
 
 class SignUpUseCase(private val authRepository: AuthRepository) {
-    suspend fun execute(request: RequestSignUpDto): UiState<User> {
+    suspend fun execute(request: AuthRequestModel): UiState<User> {
         return withContext(Dispatchers.IO) {
             try {
-                val result = authRepository.signUp(request.toAuthRequestModel())
+                val result = authRepository.signUp(request)
                 result.fold(
                     onSuccess = { response ->
                         if (response.isSuccessful) {

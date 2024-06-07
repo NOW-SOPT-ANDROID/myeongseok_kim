@@ -15,7 +15,7 @@ import com.sopt.now.util.UiState
 import com.sopt.now.util.toast
 
 class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_sign_up) {
-    private val viewModel by viewModels<SignUpViewModel>()
+    private val viewModel by viewModels<SignUpViewModel> { SignUpViewModelFactory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

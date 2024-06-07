@@ -6,8 +6,8 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.sopt.now.R
 import com.sopt.now.data.model.User
-import com.sopt.now.data.dto.request.RequestSignUpDto
 import com.sopt.now.databinding.ActivitySignUpBinding
+import com.sopt.now.domain.entity.request.AuthRequestModel
 import com.sopt.now.ui.login.LoginActivity
 import com.sopt.now.ui.login.LoginActivity.Companion.TAG_USER
 import com.sopt.now.util.BindingActivity
@@ -30,10 +30,7 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
     private fun initObserver() {
         viewModel.signUpState.observe(this) { state ->
             when (state) {
-                is UiState.Loading -> {
-
-                }
-
+                is UiState.Loading -> Unit
                 is UiState.Success -> {
                     toast("회원가입 성공 userid = ${state.data.userId} 입니다!")
                     navToLogin(state.data)
@@ -63,7 +60,7 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
         finish()
     }
 
-    private fun getSignUpRequestDto() = RequestSignUpDto(
+    private fun getSignUpRequestDto() = AuthRequestModel(
         authenticationId = binding.etSignupId.text.toString(),
         password = binding.etSignupPassword.text.toString(),
         nickname = binding.etSignupNickname.text.toString(),

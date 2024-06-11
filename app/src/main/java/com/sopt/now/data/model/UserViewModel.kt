@@ -1,27 +1,25 @@
 package com.sopt.now.data.model
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sopt.now.compose.DependenciesProvider
 import com.sopt.now.compose.R
 import com.sopt.now.compose.component.UiState
 import com.sopt.now.compose.data.ServicePool
-import com.sopt.now.compose.data.datasource.request.RequestLoginDto
-import com.sopt.now.compose.data.datasource.request.RequestSignUpDto
-import com.sopt.now.compose.data.datasource.response.ResponseLoginDto
-import com.sopt.now.compose.data.datasource.response.ResponseSignUpDto
-import com.sopt.now.compose.data.datasource.response.ResponseUserInfoDto
+import com.sopt.now.compose.domain.entity.AuthRequestModel
+import com.sopt.now.compose.domain.usecase.LogInUseCase
+import com.sopt.now.compose.domain.usecase.SignUpUseCase
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.HttpException
-import retrofit2.Response
 
-class UserViewModel() : ViewModel() {
+class UserViewModel(
+    private val logInUseCase: LogInUseCase = DependenciesProvider.logInUseCase,
+    private val signUpUseCase: SignUpUseCase = DependenciesProvider.signUpUseCase
+) : ViewModel() {
     private val _userData = mutableStateListOf<Profile>()
     val userData = _userData
 
@@ -70,67 +68,16 @@ class UserViewModel() : ViewModel() {
         )
     }
 
-    fun signUp(request: RequestSignUpDto) {
-        authService.signUp(request).enqueue(object : Callback<ResponseSignUpDto> {
-            override fun onResponse(
-                call: Call<ResponseSignUpDto>,
-                response: Response<ResponseSignUpDto>,
-            ) {
-                if (response.isSuccessful) {
-                    val userId = response.headers()["Location"]
-                    liveData.value = UiState.Success(request.toUserWithUserId(userId.toString()))
-                } else {
-                    val error = response.errorBody()?.string()
-                    try {
-                        val errorJson = JSONObject(error)
-                        val errorMessage = errorJson.getString("message")
-                        liveData.value = UiState.Error(errorMessage)
-                    } catch (e: Exception) {
-                        liveData.value = UiState.Error("회원가입 실패: 에러 메시지 파싱 실패")
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseSignUpDto>, t: Throwable) {
-                liveData.value = UiState.Error("서버 에러")
-            }
-        })
+    fun signUp(request: AuthRequestModel) {
+        viewModelScope.launch {
+            liveData.value = signUpUseCase.execute(request)
+        }
     }
 
-    fun login(request: RequestLoginDto) {
-        loginData.value = UiState.Loading
-
-        authService.login(request).enqueue(object : Callback<ResponseLoginDto> {
-            override fun onResponse(
-                call: Call<ResponseLoginDto>,
-                response: Response<ResponseLoginDto>,
-            ) {
-                if (response.isSuccessful) {
-                    loginData.value = UiState.Success(
-                        User(
-                            request.authenticationId,
-                            request.password,
-                            "",
-                            "",
-                            userid = response.headers()["location"].toString()
-                        )
-                    )
-                } else {
-                    val error = response.errorBody()?.string()
-                    try {
-                        val errorJson = JSONObject(error)
-                        val errorMessage = errorJson.getString("message")
-                        loginData.value = UiState.Error(errorMessage)
-                    } catch (e: Exception) {
-                        loginData.value = UiState.Error("로그인 실패  에러 메시지 파싱 실패")
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseLoginDto>, t: Throwable) {
-                loginData.value = UiState.Error("서버 에러")
-            }
-        })
+    fun login(request: AuthRequestModel) {
+        viewModelScope.launch {
+            loginData.value = logInUseCase.execute(request)
+        }
     }
 
     fun getInfo(userid: String) {

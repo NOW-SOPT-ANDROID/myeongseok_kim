@@ -38,6 +38,7 @@ import com.sopt.now.compose.component.textfield.TextFieldWithTitle
 import com.sopt.now.data.model.UserViewModel
 import com.sopt.now.compose.component.toastMessage
 import com.sopt.now.compose.data.datasource.request.RequestSignUpDto
+import com.sopt.now.compose.domain.entity.AuthRequestModel
 import com.sopt.now.compose.navigation.Screen
 
 
@@ -128,7 +129,7 @@ fun SignUp(navHostController: NavHostController, viewModel: UserViewModel) {
         ) {
             Button(
                 onClick = {
-                    viewModel.signUp(RequestSignUpDto(authenticationId = id, password = password, nickname = nickname, phone =  number))
+                    viewModel.signUp(AuthRequestModel(authenticationId = id, password = password, nickname = nickname, phone =  number))
                 },
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -146,5 +147,5 @@ fun SignUp(navHostController: NavHostController, viewModel: UserViewModel) {
 @Composable
 fun SignUPPreview() {
     val navHostController = rememberNavController()
-    SignUp(navHostController = navHostController, viewModel = UserViewModel())
+//    SignUp(navHostController = navHostController, viewModel = UserViewModel())
 }

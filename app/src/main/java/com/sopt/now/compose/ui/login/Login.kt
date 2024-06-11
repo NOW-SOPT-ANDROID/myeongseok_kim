@@ -36,6 +36,7 @@ import com.sopt.now.compose.component.UiState
 import com.sopt.now.compose.component.textfield.TextFieldWithTitle
 import com.sopt.now.compose.component.toastMessage
 import com.sopt.now.compose.data.datasource.request.RequestLoginDto
+import com.sopt.now.compose.domain.entity.AuthRequestModel
 import com.sopt.now.compose.navigation.Screen
 import com.sopt.now.data.model.UserViewModel
 
@@ -110,7 +111,7 @@ fun Login(navHostController: NavHostController, viewModel: UserViewModel) {
             }
             Button(
                 onClick = {
-                    viewModel.login(RequestLoginDto(id, password))
+                    viewModel.login(AuthRequestModel(id, password,"",""))
                 },
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -128,5 +129,5 @@ fun Login(navHostController: NavHostController, viewModel: UserViewModel) {
 @Composable
 fun LoginPreview() {
     val navCtrl = rememberNavController()
-    Login(navCtrl, viewModel = UserViewModel())
+//    Login(navCtrl, viewModel = UserViewModel())
 }

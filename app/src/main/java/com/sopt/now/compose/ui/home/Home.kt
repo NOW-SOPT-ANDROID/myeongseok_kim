@@ -163,7 +163,7 @@ fun MyProfileScreen(myInfo: User) {
 @Composable
 fun PreviewHome() {
     val navCtrl = rememberNavController()
-    val viewModel = UserViewModel()
-    Home(navCtrl, viewModel = viewModel)
+//    val viewModel = UserViewModel()
+//    Home(navCtrl, viewModel = viewModel)
 }
 

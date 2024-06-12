@@ -6,6 +6,8 @@ import com.sopt.now.domain.entity.request.AuthRequestModel
 import com.sopt.now.domain.usecase.SignUpUseCase
 import com.sopt.now.util.UiState
 import kotlinx.coroutines.launch
+import org.json.JSONObject
+import retrofit2.HttpException
 
 class SignUpViewModel(private val signUpUseCase: SignUpUseCase) : ViewModel() {
     private val _signUpState = MutableLiveData<UiState<User>>()
@@ -14,7 +16,29 @@ class SignUpViewModel(private val signUpUseCase: SignUpUseCase) : ViewModel() {
     fun signUp(request: AuthRequestModel) {
         _signUpState.value = UiState.Loading
         viewModelScope.launch {
-            _signUpState.value = signUpUseCase.execute(request)
+            signUpUseCase(request)
+                .onSuccess { response ->
+                    if (response.isSuccessful) {
+                        _signUpState.value =
+                            UiState.Success(request.toUserWithUserId(response.headers()[LOCATION].toString()))
+                    } else {
+                        val errorMessage =
+                            JSONObject(response.errorBody()?.string()).getString(MESSAGE)
+                        _signUpState.value = UiState.Error(errorMessage.toString())
+                    }
+                }
+                .onFailure { e ->
+                    if (e is HttpException) {
+                        _signUpState.value = UiState.Error(e.message())
+                    } else {
+                        _signUpState.value = UiState.Error(e.message.toString())
+                    }
+                }
         }
+    }
+
+    companion object {
+        private const val LOCATION = "location"
+        private const val MESSAGE = "message"
     }
 }

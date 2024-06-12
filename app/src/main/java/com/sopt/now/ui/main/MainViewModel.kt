@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sopt.now.data.api.ServicePool.infoService
 import com.sopt.now.data.model.Profile
-import com.sopt.now.data.model.User
+import com.sopt.now.ui.model.User
 import com.sopt.now.util.StringNetworkError.FAIL_ERROR
 import com.sopt.now.util.StringNetworkError.LOGIN
 import com.sopt.now.util.UiState

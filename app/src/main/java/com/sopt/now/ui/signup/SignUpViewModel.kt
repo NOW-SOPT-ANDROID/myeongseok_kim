@@ -1,7 +1,7 @@
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sopt.now.data.model.User
+import com.sopt.now.ui.model.User
 import com.sopt.now.domain.entity.request.AuthRequestModel
 import com.sopt.now.domain.usecase.SignUpUseCase
 import com.sopt.now.util.UiState
@@ -20,7 +20,15 @@ class SignUpViewModel(private val signUpUseCase: SignUpUseCase) : ViewModel() {
                 .onSuccess { response ->
                     if (response.isSuccessful) {
                         _signUpState.value =
-                            UiState.Success(request.toUserWithUserId(response.headers()[LOCATION].toString()))
+                            UiState.Success(
+                                User(
+                                    request.authenticationId,
+                                    request.password,
+                                    request.nickname,
+                                    request.phone,
+                                    response.headers()[LOCATION].toString()
+                                )
+                            )
                     } else {
                         val errorMessage =
                             JSONObject(response.errorBody()?.string()).getString(MESSAGE)

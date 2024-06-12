@@ -1,4 +1,4 @@
-package com.sopt.now.data.model
+package com.sopt.now.ui.model
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

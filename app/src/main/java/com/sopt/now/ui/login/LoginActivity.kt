@@ -6,7 +6,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.sopt.now.R
-import com.sopt.now.data.model.User
+import com.sopt.now.ui.model.User
 import com.sopt.now.databinding.ActivityLoginBinding
 import com.sopt.now.domain.entity.request.AuthRequestModel
 import com.sopt.now.ui.main.MainActivity

@@ -3,7 +3,7 @@ package com.sopt.now.ui.login
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sopt.now.data.model.User
+import com.sopt.now.ui.model.User
 import com.sopt.now.domain.entity.request.AuthRequestModel
 import com.sopt.now.domain.usecase.LogInUseCase
 import com.sopt.now.util.StringNetworkError.FAIL_ERROR

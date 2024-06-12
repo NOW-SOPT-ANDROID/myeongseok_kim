@@ -11,6 +11,7 @@ import com.sopt.now.databinding.ActivityLoginBinding
 import com.sopt.now.domain.entity.request.AuthRequestModel
 import com.sopt.now.ui.main.MainActivity
 import com.sopt.now.ui.signup.SignUpActivity
+import com.sopt.now.ui.ViewModelFactory
 import com.sopt.now.util.BindingActivity
 import com.sopt.now.util.UiState
 import com.sopt.now.util.getSafeParcelable
@@ -18,7 +19,7 @@ import com.sopt.now.util.toast
 
 class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_login) {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-    private val viewModel: LoginViewModel by viewModels { LoginViewModelFactory() }
+    private val viewModel: LoginViewModel by viewModels { ViewModelFactory() }
     private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {

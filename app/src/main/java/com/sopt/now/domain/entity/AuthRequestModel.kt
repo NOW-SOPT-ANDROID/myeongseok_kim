@@ -1,4 +1,4 @@
-package com.sopt.now.domain.entity.request
+package com.sopt.now.domain.entity
 
 
 data class AuthRequestModel(

@@ -3,7 +3,7 @@ package com.sopt.now.ui
 import SignUpViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.sopt.now.data.AuthRepositoryImpl
+import com.sopt.now.data.repositoryimpl.AuthRepositoryImpl
 import com.sopt.now.data.api.ServicePool
 import com.sopt.now.domain.usecase.LogInUseCase
 import com.sopt.now.domain.usecase.SignUpUseCase

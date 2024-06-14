@@ -3,6 +3,7 @@ package com.sopt.now.data.dto
 import com.sopt.now.data.dto.request.RequestLoginDto
 import com.sopt.now.data.dto.request.RequestSignUpDto
 import com.sopt.now.data.dto.response.BaseResponse
+import com.sopt.now.data.dto.response.ResponseInfoDto
 import com.sopt.now.domain.entity.UserEntity
 import com.sopt.now.domain.entity.BaseResponseEntity
 
@@ -25,3 +26,10 @@ internal fun BaseResponse<Unit>.toBaseResponseEntity(): BaseResponseEntity =
         code = this.code,
         message = this.message
     )
+
+internal fun ResponseInfoDto.UserData.toUserEntity(): UserEntity = UserEntity(
+    authenticationId = authenticationId,
+    password = "",
+    nickname = nickname,
+    phone = phone
+)

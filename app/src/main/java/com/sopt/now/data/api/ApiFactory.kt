@@ -22,5 +22,4 @@ object ApiFactory {
 
 object ServicePool {
     val authService: AuthService by lazy { create<AuthService>() }
-    val infoService: InfoService by lazy { create<InfoService>() }
 }

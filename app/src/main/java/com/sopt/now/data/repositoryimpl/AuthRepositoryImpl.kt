@@ -5,6 +5,7 @@ import com.sopt.now.data.dto.response.BaseResponse
 import com.sopt.now.data.dto.toBaseResponseEntity
 import com.sopt.now.data.dto.toRequestLoginDto
 import com.sopt.now.data.dto.toRequestSignUpDto
+import com.sopt.now.data.dto.toUserEntity
 import com.sopt.now.data.repositoryimpl.extension.getResponseErrorMessage
 import com.sopt.now.data.repositoryimpl.extension.handleThrowable
 import com.sopt.now.domain.entity.ApiError
@@ -16,11 +17,11 @@ import retrofit2.Response
 class AuthRepositoryImpl(private val authService: AuthService) : AuthRepository {
     override suspend fun login(authData: UserEntity): Result<Int?> =
         runCatching {
-            val response: Response<BaseResponse<Unit>> = authService.login(authData.toRequestLoginDto())
+            val response: Response<BaseResponse<Unit>> =
+                authService.login(authData.toRequestLoginDto())
             if (response.isSuccessful) {
                 response.headers()["location"]?.toInt()
-            }
-            else{
+            } else {
                 throw ApiError(response.getResponseErrorMessage())
             }
         }
@@ -32,6 +33,12 @@ class AuthRepositoryImpl(private val authService: AuthService) : AuthRepository 
             return throwable.handleThrowable()
         }
     }
+
+    override suspend fun getMemberInfo(userid: String): Result<UserEntity> =
+        runCatching {
+            authService.getUserInfo(userid).body()?.data?.toUserEntity()
+                ?: throw Exception("data is null")
+        }
 
 
 }

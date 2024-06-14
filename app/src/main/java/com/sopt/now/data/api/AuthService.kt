@@ -3,8 +3,11 @@ package com.sopt.now.data.api
 import com.sopt.now.data.dto.request.RequestLoginDto
 import com.sopt.now.data.dto.request.RequestSignUpDto
 import com.sopt.now.data.dto.response.BaseResponse
+import com.sopt.now.data.dto.response.ResponseInfoDto
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface AuthService {
@@ -18,4 +21,9 @@ interface AuthService {
     suspend fun login(
         @Body request: RequestLoginDto,
     ): Response<BaseResponse<Unit>>
+
+    @GET("/member/info")
+    suspend fun getUserInfo(
+        @Header("memberid") userId: String,
+    ): Response<ResponseInfoDto>
 }

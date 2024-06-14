@@ -1,6 +1,5 @@
 package com.sopt.now.data.dto.response
 
-import com.sopt.now.ui.model.User
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -21,8 +20,6 @@ data class ResponseInfoDto(
         val nickname: String,
         @SerialName("phone")
         val phone: String,
-    ) {
-        fun toUser() = User(id = authenticationId, password = "", nickname = nickname, phoneNumber = phone)
-    }
+    )
 }
 

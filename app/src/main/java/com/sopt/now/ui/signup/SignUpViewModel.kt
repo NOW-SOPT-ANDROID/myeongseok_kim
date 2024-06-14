@@ -1,12 +1,13 @@
+package com.sopt.now.ui.signup
+
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sopt.now.ui.model.User
 import com.sopt.now.domain.entity.UserEntity
 import com.sopt.now.domain.usecase.SignUpUseCase
+import com.sopt.now.ui.model.User
 import com.sopt.now.util.UiState
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 
 class SignUpViewModel(private val signUpUseCase: SignUpUseCase) : ViewModel() {
     private val _signUpState = MutableLiveData<UiState<User>>()
@@ -16,7 +17,7 @@ class SignUpViewModel(private val signUpUseCase: SignUpUseCase) : ViewModel() {
         _signUpState.value = UiState.Loading
         viewModelScope.launch {
             signUpUseCase(request)
-                .onSuccess { response ->
+                .onSuccess {
                     _signUpState.value =
                         UiState.Success(
                             User(
@@ -28,11 +29,7 @@ class SignUpViewModel(private val signUpUseCase: SignUpUseCase) : ViewModel() {
                         )
                 }
                 .onFailure { e ->
-                    if (e is HttpException) {
-                        _signUpState.value = UiState.Error(e.message())
-                    } else {
-                        _signUpState.value = UiState.Error(e.message.toString())
-                    }
+                    _signUpState.value = UiState.Error(e.message.toString())
                 }
         }
     }

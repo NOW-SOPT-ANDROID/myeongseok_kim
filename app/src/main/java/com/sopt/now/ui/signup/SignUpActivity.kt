@@ -1,6 +1,5 @@
 package com.sopt.now.ui.signup
 
-import SignUpViewModel
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels

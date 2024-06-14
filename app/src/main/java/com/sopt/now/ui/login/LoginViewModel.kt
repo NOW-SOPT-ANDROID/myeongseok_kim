@@ -1,5 +1,6 @@
 package com.sopt.now.ui.login
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(private val logInUseCase: LogInUseCase) : ViewModel() {
     private val _loginState = MutableLiveData<UiState<User>>()
-    val loginState = _loginState
+    val loginState : LiveData<UiState<User>> = _loginState
 
     fun login(request: UserEntity) {
         _loginState.value = UiState.Loading

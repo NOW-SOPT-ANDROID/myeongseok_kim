@@ -1,5 +1,6 @@
 package com.sopt.now.ui.signup
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class SignUpViewModel(private val signUpUseCase: SignUpUseCase) : ViewModel() {
     private val _signUpState = MutableLiveData<UiState<User>>()
-    val signUpState = _signUpState
+    val signUpState:LiveData<UiState<User>> = _signUpState
 
     fun signUp(request: UserEntity) {
         _signUpState.value = UiState.Loading

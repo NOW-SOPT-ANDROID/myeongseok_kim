@@ -1,5 +1,6 @@
 package com.sopt.now.ui.main
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,14 +14,14 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
 class MainViewModel(private val getUserInfoUseCase: GetUserInfoUseCase) : ViewModel() {
-    private val _userData = MutableLiveData<List<Profile>>()
-    val userData = _userData
+    private val _userData: MutableLiveData<List<Profile>> = MutableLiveData()
+    val userData: LiveData<List<Profile>> = _userData
 
-    private val _myInfo = MutableLiveData<UiState<UserEntity>>()
-    val myInfo = _myInfo
+    private val _myInfo: MutableLiveData<UiState<UserEntity>> = MutableLiveData()
+    val myInfo: LiveData<UiState<UserEntity>> = _myInfo
 
-    private val _myProfile = MutableLiveData<UserEntity>()
-    val myProfile = _myProfile
+    private val _myProfile: MutableLiveData<UserEntity> = MutableLiveData()
+    val myProfile: LiveData<UserEntity> = _myProfile
 
     init {
         _userData.value =

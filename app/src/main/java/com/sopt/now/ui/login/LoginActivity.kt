@@ -8,7 +8,7 @@ import androidx.activity.viewModels
 import com.sopt.now.R
 import com.sopt.now.ui.model.User
 import com.sopt.now.databinding.ActivityLoginBinding
-import com.sopt.now.domain.entity.AuthRequestModel
+import com.sopt.now.domain.entity.UserEntity
 import com.sopt.now.ui.main.MainActivity
 import com.sopt.now.ui.signup.SignUpActivity
 import com.sopt.now.ui.ViewModelFactory
@@ -85,7 +85,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
     }
 
     private fun getLoginRequest() =
-        AuthRequestModel(
+        UserEntity(
             authenticationId = binding.etLoginId.text.toString(),
             password = binding.etLoginPassword.text.toString(),
             nickname = "",

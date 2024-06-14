@@ -2,18 +2,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sopt.now.ui.model.User
-import com.sopt.now.domain.entity.AuthRequestModel
+import com.sopt.now.domain.entity.UserEntity
 import com.sopt.now.domain.usecase.SignUpUseCase
 import com.sopt.now.util.UiState
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import retrofit2.HttpException
 
 class SignUpViewModel(private val signUpUseCase: SignUpUseCase) : ViewModel() {
     private val _signUpState = MutableLiveData<UiState<User>>()
     val signUpState = _signUpState
 
-    fun signUp(request: AuthRequestModel) {
+    fun signUp(request: UserEntity) {
         _signUpState.value = UiState.Loading
         viewModelScope.launch {
             signUpUseCase(request)

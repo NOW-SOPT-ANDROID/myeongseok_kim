@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import com.sopt.now.R
 import com.sopt.now.ui.model.User
 import com.sopt.now.databinding.ActivitySignUpBinding
-import com.sopt.now.domain.entity.AuthRequestModel
+import com.sopt.now.domain.entity.UserEntity
 import com.sopt.now.ui.ViewModelFactory
 import com.sopt.now.ui.login.LoginActivity
 import com.sopt.now.ui.login.LoginActivity.Companion.TAG_USER
@@ -61,7 +61,7 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
         finish()
     }
 
-    private fun getSignUpRequestDto() = AuthRequestModel(
+    private fun getSignUpRequestDto() = UserEntity(
         authenticationId = binding.etSignupId.text.toString(),
         password = binding.etSignupPassword.text.toString(),
         nickname = binding.etSignupNickname.text.toString(),

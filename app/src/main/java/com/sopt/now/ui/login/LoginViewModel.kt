@@ -4,20 +4,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sopt.now.ui.model.User
-import com.sopt.now.domain.entity.AuthRequestModel
+import com.sopt.now.domain.entity.UserEntity
 import com.sopt.now.domain.usecase.LogInUseCase
-import com.sopt.now.util.StringNetworkError.FAIL_ERROR
-import com.sopt.now.util.StringNetworkError.LOGIN
 import com.sopt.now.util.UiState
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-import retrofit2.HttpException
 
 class LoginViewModel(private val logInUseCase: LogInUseCase) : ViewModel() {
     private val _loginState = MutableLiveData<UiState<User>>()
     val loginState = _loginState
 
-    fun login(request: AuthRequestModel) {
+    fun login(request: UserEntity) {
         _loginState.value = UiState.Loading
         viewModelScope.launch {
             logInUseCase(request)
@@ -37,11 +33,6 @@ class LoginViewModel(private val logInUseCase: LogInUseCase) : ViewModel() {
                     _loginState.value = UiState.Error(e.message.toString())
                 }
         }
-    }
-
-    companion object {
-        private const val MESSAGE = "message"
-        private const val LOCATION = "location"
     }
 }
 

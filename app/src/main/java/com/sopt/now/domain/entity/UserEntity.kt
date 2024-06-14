@@ -1,7 +1,7 @@
 package com.sopt.now.domain.entity
 
 
-data class AuthRequestModel(
+data class UserEntity(
     val authenticationId: String,
     val password: String,
     val nickname: String,

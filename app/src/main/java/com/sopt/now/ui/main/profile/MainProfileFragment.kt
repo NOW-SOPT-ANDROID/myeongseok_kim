@@ -19,10 +19,10 @@ class MainProfileFragment :
 
     private fun initLayout() {
         with(binding) {
-            tvMainIdContent.text = viewModel.myProfile.value?.id
+            tvMainIdContent.text = viewModel.myProfile.value?.authenticationId
             tvMainPasswordContent.text = viewModel.myProfile.value?.password
             tvMainNickname.text = getString(R.string.main_welcome).format(viewModel.myProfile.value?.nickname)
-            tvMainNumberContent.text = viewModel.myProfile.value?.phoneNumber
+            tvMainNumberContent.text = viewModel.myProfile.value?.phone
         }
     }
 }

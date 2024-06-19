@@ -1,29 +1,32 @@
 package com.sopt.now.ui.main
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.sopt.now.data.api.ServicePool.infoService
-import com.sopt.now.data.datasouce.response.ResponseInfoDto
+import androidx.lifecycle.viewModelScope
 import com.sopt.now.data.model.Profile
-import com.sopt.now.data.model.User
+import com.sopt.now.domain.entity.UserEntity
+import com.sopt.now.domain.usecase.GetUserInfoUseCase
 import com.sopt.now.util.StringNetworkError.FAIL_ERROR
 import com.sopt.now.util.StringNetworkError.LOGIN
-import com.sopt.now.util.StringNetworkError.SERVER_ERROR
 import com.sopt.now.util.UiState
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import javax.inject.Inject
 
-class MainViewModel : ViewModel() {
-    private val _userData = MutableLiveData<List<Profile>>()
-    val userData = _userData
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val getUserInfoUseCase: GetUserInfoUseCase
+) : ViewModel() {
+    private val _userData: MutableLiveData<List<Profile>> = MutableLiveData()
+    val userData: LiveData<List<Profile>> = _userData
 
-    private val _myInfo = MutableLiveData<UiState<User>>()
-    val myInfo = _myInfo
+    private val _myInfo: MutableLiveData<UiState<UserEntity>> = MutableLiveData()
+    val myInfo: LiveData<UiState<UserEntity>> = _myInfo
 
-    private val _myProfile = MutableLiveData<User>()
-    val myProfile = _myProfile
+    private val _myProfile: MutableLiveData<UserEntity> = MutableLiveData()
+    val myProfile: LiveData<UserEntity> = _myProfile
 
     init {
         _userData.value =
@@ -35,40 +38,27 @@ class MainViewModel : ViewModel() {
 
     fun getInfo(userid: String) {
         _myInfo.value = UiState.Loading
-        infoService.getUserInfo(userid).enqueue(object : Callback<ResponseInfoDto> {
-            override fun onResponse(
-                call: Call<ResponseInfoDto>,
-                response: Response<ResponseInfoDto>,
-            ) {
-                if (response.isSuccessful) {
-                    val user = response.body()?.data
-                    _myInfo.value = UiState.Success(user?.toUser() ?: User("", "", "", ""))
+        viewModelScope.launch {
+            getUserInfoUseCase(userid).onSuccess { response ->
+                _myInfo.value = UiState.Success(response)
+            }.onFailure { e ->
+                if (e is HttpException) {
+                    _myInfo.value = UiState.Error(e.message())
                 } else {
-                    val error = response.errorBody()?.string()
-                    try {
-                        val errorJson = JSONObject(error)
-                        val errorMessage = errorJson.getString("message")
-                        _myInfo.value = UiState.Error(errorMessage)
-                    } catch (e: Exception) {
-                        _myInfo.value = UiState.Error(FAIL_ERROR.format(LOGIN))
-                    }
+                    _myInfo.value = UiState.Error(FAIL_ERROR.format(LOGIN))
                 }
             }
-
-            override fun onFailure(call: Call<ResponseInfoDto>, t: Throwable) {
-                _myInfo.value = UiState.Error(SERVER_ERROR)
-            }
-        })
+        }
     }
 
-    fun setMyProfile(data: User) {
+    fun setMyProfile(data: UserEntity) {
         _myProfile.value = data
     }
 
     fun updateProfileWithMyProfile() {
         _userData.value =
             listOf(
-                Profile(_myProfile.value!!.nickname, _myProfile.value!!.phoneNumber),
+                Profile(_myProfile.value!!.nickname, _myProfile.value!!.phone),
                 Profile("주효은", "INFP"),
                 Profile("이유빈", "ENFP"),
                 Profile("김민우", "ISTP"),

@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import com.sopt.now.R
-import com.sopt.now.data.model.User
+import com.sopt.now.ui.model.User
 import com.sopt.now.databinding.ActivityMainBinding
 import com.sopt.now.ui.login.LoginActivity.Companion.TAG_USER
 import com.sopt.now.ui.main.home.MainHomeFragment
@@ -14,9 +14,11 @@ import com.sopt.now.util.BindingActivity
 import com.sopt.now.util.UiState
 import com.sopt.now.util.getSafeParcelable
 import com.sopt.now.util.toast
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
-    private val viewModel by viewModels<MainViewModel>()
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +40,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
                     viewModel.setMyProfile(state.data)
                     viewModel.updateProfileWithMyProfile()
                 }
-
                 is UiState.Error -> toast(state.errorMessage)
 
             }

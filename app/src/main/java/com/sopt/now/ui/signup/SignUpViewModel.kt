@@ -1,45 +1,42 @@
+package com.sopt.now.ui.signup
+
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sopt.now.data.api.ServicePool
-import com.sopt.now.data.datasouce.request.RequestSignUpDto
-import com.sopt.now.data.datasouce.response.BaseResponse
-import com.sopt.now.data.model.User
-import com.sopt.now.util.StringNetworkError.FAIL_ERROR
-import com.sopt.now.util.StringNetworkError.SERVER_ERROR
-import com.sopt.now.util.StringNetworkError.SIGNUP
+import com.sopt.now.domain.entity.UserEntity
+import com.sopt.now.domain.usecase.SignUpUseCase
+import com.sopt.now.ui.model.User
 import com.sopt.now.util.UiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.HttpException
-import retrofit2.Response
+import javax.inject.Inject
 
-class SignUpViewModel : ViewModel() {
-    private val authService by lazy { ServicePool.authService }
-
+@HiltViewModel
+class SignUpViewModel @Inject constructor(
+    private val signUpUseCase: SignUpUseCase
+) : ViewModel() {
     private val _signUpState = MutableLiveData<UiState<User>>()
-    val signUpState = _signUpState
+    val signUpState: LiveData<UiState<User>> = _signUpState
 
-    fun signUp(request: RequestSignUpDto) {
+    fun signUp(request: UserEntity) {
         _signUpState.value = UiState.Loading
         viewModelScope.launch {
-            runCatching {
-                authService.signUp(request)
-            }.onSuccess {
-                _signUpState.value =
-                    UiState.Success(request.toUserWithUserId(it.headers()["userid"].toString()))
-            }.onFailure { e ->
-                if (e is HttpException) {
-                    val errorMessage =
-                        JSONObject(e.response()?.errorBody()?.string()).getString("message")
-                    _signUpState.value = UiState.Error(errorMessage)
-                } else {
-                    _signUpState.value = UiState.Error("코드 똑바로 짜라.. ")
+            signUpUseCase(request)
+                .onSuccess {
+                    _signUpState.value =
+                        UiState.Success(
+                            User(
+                                request.authenticationId,
+                                request.password,
+                                request.nickname,
+                                request.phone,
+                            )
+                        )
                 }
-
-            }
+                .onFailure { e ->
+                    _signUpState.value = UiState.Error(e.message.toString())
+                }
         }
     }
 }

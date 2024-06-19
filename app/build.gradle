@@ -3,6 +3,9 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id "kotlin-parcelize"
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.0'
+    id 'com.google.dagger.hilt.android'
+    id 'kotlin-android'
+    id 'com.google.devtools.ksp'
 }
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
@@ -66,4 +69,8 @@ dependencies {
     // define any required OkHttp artifacts without version
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:logging-interceptor")
+
+    //hlit
+    implementation 'com.google.dagger:hilt-android:2.51'
+    ksp 'com.google.dagger:hilt-compiler:2.51.1'
 }

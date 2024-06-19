@@ -1,7 +1,8 @@
-package com.sopt.now.data.api
+package com.sopt.now.data.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.sopt.now.BuildConfig
+import com.sopt.now.data.api.AuthService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

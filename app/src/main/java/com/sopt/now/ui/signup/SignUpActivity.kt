@@ -7,15 +7,16 @@ import com.sopt.now.R
 import com.sopt.now.ui.model.User
 import com.sopt.now.databinding.ActivitySignUpBinding
 import com.sopt.now.domain.entity.UserEntity
-import com.sopt.now.ui.ViewModelFactory
 import com.sopt.now.ui.login.LoginActivity
 import com.sopt.now.ui.login.LoginActivity.Companion.TAG_USER
 import com.sopt.now.util.BindingActivity
 import com.sopt.now.util.UiState
 import com.sopt.now.util.toast
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_sign_up) {
-    private val viewModel by viewModels<SignUpViewModel> { ViewModelFactory() }
+    private val viewModel: SignUpViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

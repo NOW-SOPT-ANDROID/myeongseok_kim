@@ -9,12 +9,16 @@ import com.sopt.now.data.dto.toUserEntity
 import com.sopt.now.data.repositoryimpl.extension.getResponseErrorMessage
 import com.sopt.now.data.repositoryimpl.extension.handleThrowable
 import com.sopt.now.domain.entity.ApiError
-import com.sopt.now.domain.entity.UserEntity
 import com.sopt.now.domain.entity.BaseResponseEntity
+import com.sopt.now.domain.entity.UserEntity
 import com.sopt.now.domain.repository.AuthRepository
 import retrofit2.Response
+import javax.inject.Inject
 
-class AuthRepositoryImpl(private val authService: AuthService) : AuthRepository {
+class AuthRepositoryImpl @Inject constructor(
+    private val authService: AuthService
+) :
+    AuthRepository {
     override suspend fun login(authData: UserEntity): Result<Int?> =
         runCatching {
             val response: Response<BaseResponse<Unit>> =

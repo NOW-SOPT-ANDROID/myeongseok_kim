@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import com.sopt.now.R
 import com.sopt.now.ui.model.User
 import com.sopt.now.databinding.ActivityMainBinding
-import com.sopt.now.ui.ViewModelFactory
 import com.sopt.now.ui.login.LoginActivity.Companion.TAG_USER
 import com.sopt.now.ui.main.home.MainHomeFragment
 import com.sopt.now.ui.main.profile.MainProfileFragment
@@ -15,9 +14,11 @@ import com.sopt.now.util.BindingActivity
 import com.sopt.now.util.UiState
 import com.sopt.now.util.getSafeParcelable
 import com.sopt.now.util.toast
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
-    private val viewModel: MainViewModel by viewModels { ViewModelFactory() }
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

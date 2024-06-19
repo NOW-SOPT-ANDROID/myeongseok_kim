@@ -8,11 +8,16 @@ import com.sopt.now.domain.entity.UserEntity
 import com.sopt.now.domain.usecase.SignUpUseCase
 import com.sopt.now.ui.model.User
 import com.sopt.now.util.UiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SignUpViewModel(private val signUpUseCase: SignUpUseCase) : ViewModel() {
+@HiltViewModel
+class SignUpViewModel @Inject constructor(
+    private val signUpUseCase: SignUpUseCase
+) : ViewModel() {
     private val _signUpState = MutableLiveData<UiState<User>>()
-    val signUpState:LiveData<UiState<User>> = _signUpState
+    val signUpState: LiveData<UiState<User>> = _signUpState
 
     fun signUp(request: UserEntity) {
         _signUpState.value = UiState.Loading

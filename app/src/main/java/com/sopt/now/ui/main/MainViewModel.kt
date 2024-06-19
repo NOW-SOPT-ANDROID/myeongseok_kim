@@ -10,10 +10,15 @@ import com.sopt.now.domain.usecase.GetUserInfoUseCase
 import com.sopt.now.util.StringNetworkError.FAIL_ERROR
 import com.sopt.now.util.StringNetworkError.LOGIN
 import com.sopt.now.util.UiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import javax.inject.Inject
 
-class MainViewModel(private val getUserInfoUseCase: GetUserInfoUseCase) : ViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val getUserInfoUseCase: GetUserInfoUseCase
+) : ViewModel() {
     private val _userData: MutableLiveData<List<Profile>> = MutableLiveData()
     val userData: LiveData<List<Profile>> = _userData
 

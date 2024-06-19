@@ -8,11 +8,16 @@ import com.sopt.now.ui.model.User
 import com.sopt.now.domain.entity.UserEntity
 import com.sopt.now.domain.usecase.LogInUseCase
 import com.sopt.now.util.UiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel(private val logInUseCase: LogInUseCase) : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val logInUseCase: LogInUseCase
+) : ViewModel() {
     private val _loginState = MutableLiveData<UiState<User>>()
-    val loginState : LiveData<UiState<User>> = _loginState
+    val loginState: LiveData<UiState<User>> = _loginState
 
     fun login(request: UserEntity) {
         _loginState.value = UiState.Loading
